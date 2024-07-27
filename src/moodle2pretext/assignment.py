@@ -9,7 +9,8 @@ from moodle2pretext.utils.html import simplifyHTML
 
 class Assignment:
 
-  def __init__(self, name, intro, questions):
+  def __init__(self, id, name, intro, questions):
+    self.id = id
     self.name = name
     self.intro = simplifyHTML(intro)
     self.questions = questions
@@ -18,6 +19,7 @@ class Assignment:
   def fromFile(filename, all_questions: list[Node]) -> Self:
     document = parse(filename)
 
+    id = getFirst(document, "activity").attributes["moduleid"].value
     quizEl = getFirst(document, "quiz")
     name = getFirstText(quizEl, "name")
     intro = getFirstText(quizEl, "intro")
@@ -32,4 +34,4 @@ class Assignment:
     }
     questionsInOrder = [questions[entry] for entry in qbEntries]
 
-    return Assignment(name, intro, questionsInOrder)
+    return Assignment(id, name, intro, questionsInOrder)
