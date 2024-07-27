@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="32204">
+  <parent>0</parent>
+  <name>digraph_shortest_path_mc</name>
+  <questiontext>&lt;p&gt;&lt;span class="" style="font-size: x-large;"&gt;Example: Directed Graph&lt;/span&gt;&lt;/p&gt;</questiontext>
+  <questiontextformat>1</questiontextformat>
+  <generalfeedback></generalfeedback>
+  <generalfeedbackformat>1</generalfeedbackformat>
+  <defaultmark>1.0000000</defaultmark>
+  <penalty>.3333333</penalty>
+  <qtype>multichoice</qtype>
+  <length>1</length>
+  <stamp>moodle.hanover.edu+200420211619+ddpx8k</stamp>
+  <timecreated>1587417379</timecreated>
+  <timemodified>1587417379</timemodified>
+  <createdby>27</createdby>
+  <modifiedby>27</modifiedby>
+  <plugin_qtype_multichoice_question>
+    <answers>
+      <answer id="68764">
+        <answertext>&lt;p&gt;1&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>.2000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68765">
+        <answertext>&lt;p&gt;2&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>-.1000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68766">
+        <answertext>&lt;p&gt;3&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>-.1000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68767">
+        <answertext>&lt;p&gt;4&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>.2000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68768">
+        <answertext>&lt;p&gt;5&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>-.1000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68769">
+        <answertext>&lt;p&gt;6&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>-.1000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68770">
+        <answertext>&lt;p&gt;7&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>-.1000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68771">
+        <answertext>&lt;p&gt;8&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>.2000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68772">
+        <answertext>&lt;p&gt;9&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>.2000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="68773">
+        <answertext>&lt;p&gt;10&lt;/p&gt;</answertext>
+        <answerformat>1</answerformat>
+        <fraction>.2000000</fraction>
+        <feedback></feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+    </answers>
+    <multichoice id="14057">
+      <layout>0</layout>
+      <single>0</single>
+      <shuffleanswers>0</shuffleanswers>
+      <correctfeedback>Your answer is correct.</correctfeedback>
+      <correctfeedbackformat>1</correctfeedbackformat>
+      <partiallycorrectfeedback>Your answer is partially correct.</partiallycorrectfeedback>
+      <partiallycorrectfeedbackformat>1</partiallycorrectfeedbackformat>
+      <incorrectfeedback>Your answer is incorrect.</incorrectfeedback>
+      <incorrectfeedbackformat>1</incorrectfeedbackformat>
+      <answernumbering>abc</answernumbering>
+      <shownumcorrect>1</shownumcorrect>
+      <showstandardinstruction>1</showstandardinstruction>
+    </multichoice>
+  </plugin_qtype_multichoice_question>
+  <plugin_qbank_comment_question>
+    <comments>
+    </comments>
+  </plugin_qbank_comment_question>
+  <plugin_qbank_customfields_question>
+    <customfields>
+    </customfields>
+  </plugin_qbank_customfields_question>
+  <question_hints>
+  </question_hints>
+  <tags>
+  </tags>
+</question>

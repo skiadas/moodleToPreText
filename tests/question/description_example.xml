@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="32203">
+  <parent>0</parent>
+  <name>priority_queue_other_implementations_introduction</name>
+  <questiontext>&lt;p&gt;&lt;span class="" style="font-size: x-large;"&gt;Other Priority Queue Implementations&lt;/span&gt;&lt;/p&gt;</questiontext>
+  <questiontextformat>1</questiontextformat>
+  <generalfeedback></generalfeedback>
+  <generalfeedbackformat>1</generalfeedbackformat>
+  <defaultmark>.0000000</defaultmark>
+  <penalty>.0000000</penalty>
+  <qtype>description</qtype>
+  <length>0</length>
+  <stamp>moodle.hanover.edu+200330185656+EWSjB4</stamp>
+  <timecreated>1585594616</timecreated>
+  <timemodified>1585594616</timemodified>
+  <createdby>27</createdby>
+  <modifiedby>27</modifiedby>
+  <plugin_qbank_comment_question>
+    <comments></comments>
+  </plugin_qbank_comment_question>
+  <plugin_qbank_customfields_question>
+    <customfields></customfields>
+  </plugin_qbank_customfields_question>
+  <question_hints></question_hints>
+  <tags></tags>
+</question>

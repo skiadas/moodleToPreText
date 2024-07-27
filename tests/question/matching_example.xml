@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="31854">
+  <parent>0</parent>
+  <name>file_reading_match</name>
+  <questiontext>&lt;p&gt;Suppose &lt;b&gt;pet_names.txt&lt;/b&gt; is the name</questiontext>
+  <questiontextformat>1</questiontextformat>
+  <generalfeedback></generalfeedback>
+  <generalfeedbackformat>1</generalfeedbackformat>
+  <defaultmark>6.0000000</defaultmark>
+  <penalty>.3333333</penalty>
+  <qtype>matchwiris</qtype>
+  <length>1</length>
+  <stamp>moodle.hanover.edu+200321184400+HwkFz7</stamp>
+  <timecreated>1584816240</timecreated>
+  <timemodified>1584907277</timemodified>
+  <createdby>27</createdby>
+  <modifiedby>27</modifiedby>
+  <plugin_qtype_matchwiris_question>
+    <matchoptions id="934">
+      <shuffleanswers>1</shuffleanswers>
+      <correctfeedback>Your answer is correct.</correctfeedback>
+      <correctfeedbackformat>1</correctfeedbackformat>
+      <partiallycorrectfeedback>Your answer is partially correct.</partiallycorrectfeedback>
+      <partiallycorrectfeedbackformat>1</partiallycorrectfeedbackformat>
+      <incorrectfeedback>Your answer is incorrect.</incorrectfeedback>
+      <incorrectfeedbackformat>1</incorrectfeedbackformat>
+      <shownumcorrect>1</shownumcorrect>
+    </matchoptions>
+    <matches>
+      <match id="6723">
+        <questiontext>&lt;pre&gt;x = pets.readlines() # NOTICE the 's' on readlines&lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is a list of strings; x contains each line in pet_names.txt as a list item.</answertext>
+      </match>
+      <match id="6724">
+        <questiontext>&lt;pre&gt;x = pets.read()
+          &lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is a single string containing the entire contents of pet_names.txt.</answertext>
+      </match>
+      <match id="6725">
+        <questiontext>&lt;pre&gt;x = pets.readline()
+          &lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is the first line of pet_names.txt.</answertext>
+      </match>
+      <match id="6726">
+        <questiontext>&lt;pre&gt;x = len(pets.readlines()) # NOTICE the 's' on readlines
+          &lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is the number of lines in pet_names.txt</answertext>
+      </match>
+      <match id="6727">
+        <questiontext>&lt;pre&gt;acc = 0
+          for line in pets:
+          acc = acc + len(line)
+          x = acc
+          
+          &lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is the number of characters in pet_names.txt, including newline characters</answertext>
+      </match>
+      <match id="6728">
+        <questiontext></questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is the number of characters in pet_names.txt, NOT including newline characters</answertext>
+      </match>
+      <match id="6729">
+        <questiontext>&lt;pre&gt;for line in pets:
+          print("hello")
+          x = line
+          
+          &lt;/pre&gt;</questiontext>
+        <questiontextformat>1</questiontextformat>
+        <answertext>x is the last line of pet_names.txt</answertext>
+      </match>
+    </matches>
+    <question_xml id="122">
+      <xml>&lt;question/&gt;</xml>
+    </question_xml>
+  </plugin_qtype_matchwiris_question>
+  <plugin_qbank_comment_question>
+    <comments></comments>
+  </plugin_qbank_comment_question>
+  <plugin_qbank_customfields_question>
+    <customfields></customfields>
+  </plugin_qbank_customfields_question>
+  <question_hints></question_hints>
+  <tags></tags>
+</question>

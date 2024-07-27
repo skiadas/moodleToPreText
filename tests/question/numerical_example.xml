@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="32331">
+  <parent>0</parent>
+  <name>pogil_2a_main_num_objects</name>
+  <questiontext>In the question here</questiontext>
+  <questiontextformat>1</questiontextformat>
+  <generalfeedback></generalfeedback>
+  <generalfeedbackformat>1</generalfeedbackformat>
+  <defaultmark>1.0000000</defaultmark>
+  <penalty>.3333333</penalty>
+  <qtype>numerical</qtype>
+  <length>1</length>
+  <stamp>moodle.hanover.edu+200410214826+6jErJ0</stamp>
+  <timecreated>1586555306</timecreated>
+  <timemodified>1586707698</timemodified>
+  <createdby>27</createdby>
+  <modifiedby>27</modifiedby>
+  <plugin_qtype_numerical_question>
+    <answers>
+      <answer id="69174">
+        <answertext>4</answertext>
+        <answerformat>0</answerformat>
+        <fraction>0.5000000</fraction>
+        <feedback>Almost!</feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+      <answer id="69175">
+        <answertext>2</answertext>
+        <answerformat>0</answerformat>
+        <fraction>1.0000000</fraction>
+        <feedback>Correct!</feedback>
+        <feedbackformat>1</feedbackformat>
+      </answer>
+    </answers>
+    <numerical_units>
+    </numerical_units>
+    <numerical_options>
+      <numerical_option id="2809">
+        <showunits>3</showunits>
+        <unitsleft>0</unitsleft>
+        <unitgradingtype>0</unitgradingtype>
+        <unitpenalty>.1000000</unitpenalty>
+      </numerical_option>
+    </numerical_options>
+    <numerical_records>
+      <numerical_record id="2276">
+        <answer>69175</answer>
+        <tolerance>0.5</tolerance>
+      </numerical_record>
+      <numerical_record id="2276">
+        <answer>69174</answer>
+        <tolerance>0.3</tolerance>
+      </numerical_record>
+    </numerical_records>
+  </plugin_qtype_numerical_question>
+  <plugin_qbank_comment_question>
+    <comments>
+    </comments>
+  </plugin_qbank_comment_question>
+  <plugin_qbank_customfields_question>
+    <customfields>
+    </customfields>
+  </plugin_qbank_customfields_question>
+  <question_hints>
+  </question_hints>
+  <tags>
+  </tags>
+</question>

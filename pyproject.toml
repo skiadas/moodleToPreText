@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "moodletopretext"
+version = "0.1.0"
+description = "Tool to convert Moodle course info (mostly quiz questions) to a pretext format"
+authors = ["Haris Skiadas <cskiadas@gmail.com>", "Barb Wahl <barb.wahl.1960@gmail.com>"]
+readme = "README.md"
+
+packages = [{ include = "moodle2pretext", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+bs4 = "^0.0.2"
+lxml = "^5.2.2"
+typer = "^0.12.3"
+ptx-formatter = {git = "https://github.com/skiadas/ptx-formatter.git"}
+
+[tool.poetry.group.test.dependencies]
+pytest = "^6.0.0"
+pytest-clarity = "^1.0.1"
+pytest-mock = "*"
+
+[tool.poetry.group.dev.dependencies]
+yapf = "^0.40.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.yapf]
+based_on_style = "google"
+indent_width = 2
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+addopts="-vv --html=reports/tests/index.html"
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    # note the use of single quote below to denote "raw" strings in TOML
+    'ignore:TestResult has no addDuration method',
+]

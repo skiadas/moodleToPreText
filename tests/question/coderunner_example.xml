@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question id="30557">
+  <parent>0</parent>
+  <name>sum_2d_array</name>
+  <questiontext>&lt;h4&gt;Sum Number Array&lt;/h4&gt;</questiontext>
+  <questiontextformat>1</questiontextformat>
+  <generalfeedback></generalfeedback>
+  <generalfeedbackformat>1</generalfeedbackformat>
+  <defaultmark>1.0000000</defaultmark>
+  <penalty>.0000000</penalty>
+  <qtype>coderunner</qtype>
+  <length>1</length>
+  <stamp>moodle.hanover.edu+200331194529+RfrQmE</stamp>
+  <timecreated>1585683929</timecreated>
+  <timemodified>1585735573</timemodified>
+  <createdby>27</createdby>
+  <modifiedby>27</modifiedby>
+  <plugin_qtype_coderunner_question>
+    <coderunner_options>
+      <coderunner_option id="20">
+        <coderunnertype>python3</coderunnertype>
+        <prototypetype>0</prototypetype>
+        <allornothing>1</allornothing>
+        <penaltyregime>10, 20, ...</penaltyregime>
+        <precheck>0</precheck>
+        <hidecheck>0</hidecheck>
+        <showsource>0</showsource>
+        <answerboxlines>10</answerboxlines>
+        <answerboxcolumns>100</answerboxcolumns>
+        <answerpreload></answerpreload>
+        <globalextra>$@NULL@$</globalextra>
+        <useace>$@NULL@$</useace>
+        <resultcolumns>$@NULL@$</resultcolumns>
+        <template>$@NULL@$</template>
+        <iscombinatortemplate>$@NULL@$</iscombinatortemplate>
+        <allowmultiplestdins>$@NULL@$</allowmultiplestdins>
+        <answer>def sum_array(nums):
+          accsum = 0
+          for r in nums:
+          for c in r:
+          accsum = accsum + c
+          return accsum</answer>
+        <validateonsave>1</validateonsave>
+        <testsplitterre>$@NULL@$</testsplitterre>
+        <language>$@NULL@$</language>
+        <acelang>$@NULL@$</acelang>
+        <sandbox>$@NULL@$</sandbox>
+        <grader>$@NULL@$</grader>
+        <cputimelimitsecs>$@NULL@$</cputimelimitsecs>
+        <memlimitmb>$@NULL@$</memlimitmb>
+        <sandboxparams>$@NULL@$</sandboxparams>
+        <templateparams></templateparams>
+        <hoisttemplateparams>1</hoisttemplateparams>
+        <extractcodefromjson>$@NULL@$</extractcodefromjson>
+        <templateparamslang>twig</templateparamslang>
+        <templateparamsevalpertry>0</templateparamsevalpertry>
+        <templateparamsevald>$@NULL@$</templateparamsevald>
+        <twigall>0</twigall>
+        <uiplugin>$@NULL@$</uiplugin>
+        <uiparameters>$@NULL@$</uiparameters>
+        <attachments>0</attachments>
+        <attachmentsrequired>0</attachmentsrequired>
+        <maxfilesize>10240</maxfilesize>
+        <filenamesregex></filenamesregex>
+        <filenamesexplain></filenamesexplain>
+        <displayfeedback>1</displayfeedback>
+        <giveupallowed>0</giveupallowed>
+        <prototypeextra>$@NULL@$</prototypeextra>
+      </coderunner_option>
+    </coderunner_options>
+    <coderunner_testcases>
+      <coderunner_testcase id="1">
+        <testcode>nums = [[3, 1], [4, 0], [-2, 5]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>11
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="2">
+        <testcode>nums = [[1, 2, 3], [4, 5, 6, 7, 8], [9, 10]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>55
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="2">
+        <testcode>nums = [[1, 2, 3], [4, 5, 6, 7, 8], [9, 10]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>55
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="3">
+        <testcode>nums = [[10], [11], [12]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>33
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="4">
+        <testcode>nums = [[10, 11, 12]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>33
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="5">
+        <testcode>nums = [[3, 1, 11, 19, 2], [4, 0], [-100]]
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>-60
+</expected>
+        <useasexample>0</useasexample>
+        <display>HIDE</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+      <coderunner_testcase id="6">
+        <testcode>nums = []
+          print(sum_array(nums))</testcode>
+        <testtype>0</testtype>
+        <expected>0
+</expected>
+        <useasexample>0</useasexample>
+        <display>SHOW</display>
+        <hiderestiffail>0</hiderestiffail>
+        <mark>1.000</mark>
+        <stdin></stdin>
+        <extra></extra>
+      </coderunner_testcase>
+    </coderunner_testcases>
+  </plugin_qtype_coderunner_question>
+  <plugin_qbank_comment_question>
+    <comments>
+    </comments>
+  </plugin_qbank_comment_question>
+  <plugin_qbank_customfields_question>
+    <customfields>
+    </customfields>
+  </plugin_qbank_customfields_question>
+  <question_hints>
+  </question_hints>
+  <tags>
+  </tags>
+</question>
