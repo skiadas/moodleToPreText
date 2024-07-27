@@ -29,8 +29,8 @@ class Question:
 # TODO
 def processQuestionText(text: str) -> tuple[str, str | None]:
   simplified = pretextify(text)
-  soup = bs4.BeautifulSoup(simplified)
-  firstTag = soup.body.contents[0]
+  soup = bs4.BeautifulSoup(simplified, "html.parser")
+  firstTag = soup.contents[0]
   if (firstTag.name == "h3"):
     title = firstTag.get_text()
     firstTag.extract()

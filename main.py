@@ -1,9 +1,5 @@
-import tarfile
 import typer
-import re
-from xml.dom.minidom import parse
-from moodle2pretext import Assignment
-from moodle2pretext.utils.ptx_writer import PtxWriter
+from moodle2pretext.course import Course
 
 
 def main(zip_path: str, out_file: str):
@@ -11,21 +7,9 @@ def main(zip_path: str, out_file: str):
   Reads a Moodle backup file with path zip_path
   and produces a PreText output file with path out_file
   """
-  with tarfile.open(zip_path, "r:gz") as tar:
-    prog = re.compile(r"activities/quiz_[0-9]+/quiz\.xml")
-    f = tar.extractfile("questions.xml")
-    ALL_QUESTIONS_DOC = parse(f)
-    ALL_QUESTIONS = ALL_QUESTIONS_DOC.getElementsByTagName(
-        "question_bank_entry")
-    assignments = [
-        Assignment.fromFile(tar.extractfile(tarInfo), ALL_QUESTIONS)
-        for tarInfo in tar.getmembers()
-        if prog.match(tarInfo.name)
-    ]
-    ptx_writer = PtxWriter()
-    ptx_writer.process(assignments)
-    with open(out_file, "w") as f:
-      f.write(ptx_writer.toString())
+  course = Course.fromZip(zip_path)
+  with open(out_file, "w") as f:
+    f.write(course.toPretext())
 
 
 if __name__ == "__main__":
