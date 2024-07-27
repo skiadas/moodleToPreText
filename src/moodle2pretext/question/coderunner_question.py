@@ -12,12 +12,13 @@ class TestCase:
   useAsExample: bool
   show: bool
 
-  def __init__(self,
-               testCode: str,
-               expected: str,
-               stdInput: str,
-               useAsExample: bool = False,
-               show: bool = True):
+  def __init__(
+      self,
+      testCode: str,
+      expected: str,
+      stdInput: str,
+      useAsExample: bool = False,
+      show: bool = True):
     self.testCode = testCode
     self.expected = expected
     self.stdInput = stdInput
@@ -26,10 +27,12 @@ class TestCase:
 
   @staticmethod
   def fromNode(tc: Node) -> Self:
-    return TestCase(getFirstText(tc, "testcode"), getFirstText(tc, "expected"),
-                    getFirstText(tc, "stdin"),
-                    getFirstText(tc, "useasexample") == "1",
-                    getFirstText(tc, "display") == "SHOW")
+    return TestCase(
+        getFirstText(tc, "testcode"),
+        getFirstText(tc, "expected"),
+        getFirstText(tc, "stdin"),
+        getFirstText(tc, "useasexample") == "1",
+        getFirstText(tc, "display") == "SHOW")
 
 
 class CodeRunnerQuestion(Question):
@@ -38,8 +41,14 @@ class CodeRunnerQuestion(Question):
   answer: str  # the correct answer
   testCases: list[TestCase]  # Array of test cases
 
-  def __init__(self, name: str, questionText: str, type: str, preload: str,
-               answer: str, testCases: list[TestCase]):
+  def __init__(
+      self,
+      name: str,
+      questionText: str,
+      type: str,
+      preload: str,
+      answer: str,
+      testCases: list[TestCase]):
     super().__init__(name, questionText)
     self.type = type
     self.preload = preload
@@ -47,9 +56,10 @@ class CodeRunnerQuestion(Question):
     self.testCases = testCases
 
   def __str__(self):
-    return ("name: " + self.name + "\n" + "text: " + self.questionText + "\n" +
-            "type: " + self.type + "\n" + "preload: " + self.preload + "\n" +
-            "testCases: " + str(len(self.testCases)))
+    return (
+        "name: " + self.name + "\n" + "text: " + self.questionText + "\n" +
+        "type: " + self.type + "\n" + "preload: " + self.preload + "\n" +
+        "testCases: " + str(len(self.testCases)))
 
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:

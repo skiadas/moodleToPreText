@@ -7,9 +7,10 @@ import bs4
 from moodle2pretext.utils import getFirstText
 from moodle2pretext.utils.html import pretextify, simplifyHTML
 
+
 class Question:
-  name: str # internal name
-  questionText: str # HTML escaped
+  name: str  # internal name
+  questionText: str  # HTML escaped
   title: Optional[str] = None
 
   def __init__(self, name: str, questionText: str):
@@ -21,9 +22,9 @@ class Question:
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:
     return Question(
-      name=getFirstText(questionEntry, "name"),
-      questionText=getFirstText(questionEntry, "questiontext")
-    )
+        name=getFirstText(questionEntry, "name"),
+        questionText=getFirstText(questionEntry, "questiontext"))
+
 
 # TODO
 def processQuestionText(text: str) -> tuple[str, str | None]:

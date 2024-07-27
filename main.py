@@ -5,6 +5,7 @@ from xml.dom.minidom import parse
 from moodle2pretext import Assignment
 from moodle2pretext.utils.ptx_writer import PtxWriter
 
+
 def main(zip_path: str, out_file: str):
   """
   Reads a Moodle backup file with path zip_path
@@ -14,19 +15,21 @@ def main(zip_path: str, out_file: str):
     prog = re.compile(r"activities/quiz_[0-9]+/quiz\.xml")
     f = tar.extractfile("questions.xml")
     ALL_QUESTIONS_DOC = parse(f)
-    ALL_QUESTIONS = ALL_QUESTIONS_DOC.getElementsByTagName("question_bank_entry")
+    ALL_QUESTIONS = ALL_QUESTIONS_DOC.getElementsByTagName(
+        "question_bank_entry")
     assignments = [
-      Assignment.fromFile(tar.extractfile(tarInfo), ALL_QUESTIONS)
-      for tarInfo in tar.getmembers()
-      if prog.match(tarInfo.name)
+        Assignment.fromFile(tar.extractfile(tarInfo), ALL_QUESTIONS)
+        for tarInfo in tar.getmembers()
+        if prog.match(tarInfo.name)
     ]
     ptx_writer = PtxWriter()
     ptx_writer.process(assignments)
     with open(out_file, "w") as f:
       f.write(ptx_writer.toString())
 
+
 if __name__ == "__main__":
-    typer.run(main)
+  typer.run(main)
 
 # main("sampleZip.zip", "example.ptx")
 
@@ -35,7 +38,6 @@ if __name__ == "__main__":
 
 # from bs4 import BeautifulSoup as bs
 # from moodle2pretext.question import *
-
 
 # def collectTagsFromText(text: str):
 #   soup = bs(text, "html.parser")
@@ -74,7 +76,6 @@ if __name__ == "__main__":
 
 # activities/quiz_45647/quiz.xml
 # ALL_QUESTIONS_DOC = parse("sampleData/questions.xml")
-
 
 ## TODO
 ## - What HTML transformation do we need?

@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 
 from ptx_formatter import formatPretext
 
+
 def simplifyHTML(html: str) -> str:
   simplifier = HtmlSimplifier(html)
   simplifier.simplify()
   # simplifier.printTopLevels()
   return str(simplifier)
+
 
 def pretextify(html: str) -> str:
   simplifier = HtmlSimplifier(html)
@@ -16,7 +18,9 @@ def pretextify(html: str) -> str:
   HtmlSimplifier(html)
   return str(simplifier)
 
+
 class HtmlSimplifier:
+
   def __init__(self, html: str) -> None:
     self.soup = BeautifulSoup(html, 'html.parser')
 
@@ -24,10 +28,7 @@ class HtmlSimplifier:
     return formatPretext(str(self.soup))
 
   def printTopLevels(self) -> None:
-    print([
-      c.name if c.name is not None else "str"
-      for c in self.soup.contents
-    ])
+    print([c.name if c.name is not None else "str" for c in self.soup.contents])
 
   def pretextify(self) -> None:
     self.soup.smooth()
@@ -88,7 +89,7 @@ class HtmlSimplifier:
         tag.replace_with(innerTag)
       else:
         self.handle_inner_list_outside_item(tag)
-    for tag in self.soup.find_all("div", { "class": "editor-indent" }):
+    for tag in self.soup.find_all("div", {"class": "editor-indent"}):
       tag.unwrap()
     for tag in self.soup.find_all("div"):
       if len(tag.contents) == 0:
@@ -105,7 +106,8 @@ class HtmlSimplifier:
     for tag in self.soup.find_all("tt"):
       self.putStringContentInNewTag(tag, "c")
     for tag in self.soup.find_all(["sup", "sub"]):
-      tag.replace_with("&lt;" + tag.name + "&rt;" + tag.string + "&lt;/" + tag.name + "&rt;")
+      tag.replace_with(
+          "&lt;" + tag.name + "&rt;" + tag.string + "&lt;/" + tag.name + "&rt;")
     for tag in self.soup.find_all("span"):
       if tag.get_text() == '':
         tag.extract()
@@ -141,7 +143,9 @@ class HtmlSimplifier:
         if pr is None:
           # No list item before the list element
           # nothing we can do
-          raise RuntimeError("Shouldn't happen: Sublist as the first thing in a list without a containing li")
+          raise RuntimeError(
+              "Shouldn't happen: Sublist as the first thing in a list without a containing li"
+          )
         else:
           # Can now add to this previous item
           pr.append(child)
@@ -166,4 +170,3 @@ def stripBlanks(tag: Node):
         del tag.contents[idx]
       else:
         tag.contents[idx] = newString
-
