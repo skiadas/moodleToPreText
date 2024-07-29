@@ -1,4 +1,4 @@
-from typing import TextIO
+from typing import Dict, Iterable, TextIO
 from bs4 import BeautifulSoup
 import re
 
@@ -6,6 +6,8 @@ from ptx_formatter import formatPretext
 
 from moodle2pretext.question import *
 from moodle2pretext.assignment import Assignment
+from moodle2pretext.question.multiplechoice import Choice
+from moodle2pretext.utils import yesOrNo
 
 # Pattern for which characters in a ID are to be
 # replaced by whitespace
@@ -21,43 +23,76 @@ class PtxWriter:
     self.seenIds = {}
 
   def process(self, assignments: list[Assignment]):
-    for assignment in assignments:
-      sectionTag = self.soup.new_tag(
-          "section",
-          attrs={"xml:id": self.makeUniqueId("sec", assignment.name)})
-      self.chapter.append(sectionTag)
-      sectionTag.append(self.makeTagFromHTML("title", assignment.name))
-      sectionTag.append(self.makeTagFromHTML("introduction", assignment.intro))
-      exercisesTag = self.soup.new_tag("exercises")
-      sectionTag.append(exercisesTag)
-      for question in assignment.questions:
-        exercisesTag.append(self.processQuestion(question))
+    self.chapter.extend(map(self.makeAssignment, assignments))
+
+  def makeAssignment(self, assignment):
+    exercisesTag = self.makeTag(
+        "exercises", map(self.processQuestion, assignment.questions))
+    return self.makeTag(
+        "section",
+        [
+            self.makeTag("title", assignment.name),
+            self.makeTag("introduction", assignment.intro),
+            exercisesTag
+        ],
+        attrs={"xml:id": self.makeUniqueId("sec", assignment.name)})
 
   def toString(self) -> str:
     return formatPretext(str(self.soup))
 
-  def makeTagFromHTML(self, tagName: str, contentHTML: str) -> Node:
-    tag = self.soup.new_tag(tagName)
-    tag.append(BeautifulSoup(contentHTML, "html.parser"))
+  def makeTag(
+      self,
+      tagName: str,
+      content: str | Iterable[Node],
+      attrs: Dict[str, str] = {}) -> Node:
+    tag = self.soup.new_tag(tagName, attrs=attrs)
+    if isinstance(content, str):
+      tag.append(BeautifulSoup(content, "html.parser"))
+    else:
+      tag.extend(content)
     return tag
 
   def processQuestion(self, question: Question) -> Node:
-    exerciseTag = self.soup.new_tag(
-        "exercise", attrs={"xml:id": self.makeUniqueId("exer", question.name)})
-    exerciseTag.append(self.makeTagFromHTML("title", question.title))
-    exerciseTag.append(self.makeTagFromHTML("statement", question.questionText))
+    exerciseTag = self.makeTag(
+        "exercise",
+        [
+            self.makeTag("title", question.title),
+            self.makeTag("statement", question.questionText)
+        ],
+        attrs={"xml:id": self.makeUniqueId("exer", question.name)})
     if isinstance(question, MatchingQuestion):
-      self.addMatchingQuestionParts(exerciseTag, question)
+      exerciseTag.append(self.getMatchingQuestionParts(question))
+    elif isinstance(question, MultipleChoiceQuestion):
+      exerciseTag.append(self.getMCQuestionParts(question))
+    elif isinstance(question, FillInQuestion):
+      ...
+    elif isinstance(question, CodeRunnerQuestion):
+      ...
     return exerciseTag
 
-  def addMatchingQuestionParts(self, tag, question: MatchingQuestion) -> None:
-    matchesTag = self.soup.new_tag("matches")
-    tag.append(matchesTag)
-    for premise, response in question.matches:
-      matchTag = self.soup.new_tag("match")
-      matchesTag.append(matchTag)
-      matchTag.append(self.makeTagFromHTML("premise", premise))
-      matchTag.append(self.makeTagFromHTML("response", response))
+  def getMatchingQuestionParts(self, question: MatchingQuestion) -> Node:
+    return self.makeTag("matches", map(self.makeMatch, question.matches))
+
+  def makeMatch(self, match: tuple[str, str]) -> Node:
+    premise, response = match
+    return self.makeTag(
+        "match",
+        [self.makeTag("premise", premise), self.makeTag("response", response)])
+
+  def getMCQuestionParts(self, question: MultipleChoiceQuestion) -> Node:
+    return self.makeTag(
+        "choices",
+        map(self.makeChoice, question.choices),
+        {"multiple-correct": yesOrNo(question.allowsMultipleAnswers)})
+
+  def makeChoice(self, choice: Choice) -> Node:
+    return self.makeTag(
+        "choice",
+        [
+            self.makeTag("statement", choice.statement),
+            self.makeTag("feedback", choice.feedback)
+        ],
+        attrs={"correct": yesOrNo(choice.isCorrect)})
 
   def makeUniqueId(self, prefix: str, id: str) -> str:
     encodedId = self.makeIdLike(id)

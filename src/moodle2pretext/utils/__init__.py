@@ -9,16 +9,23 @@ def getText(node: Node) -> str:
   return ''.join([getText(child) for child in node.childNodes])
 
 
-def getFirst(node: Node, tagName: str) -> Node:
-  list = node.getElementsByTagName(tagName)
-  if len(list) == 0:
-    raise RuntimeError("No child tag: " + tagName)
-  return list[0]
+def getFirst(node: Node, tagName: str | list[str]) -> Node:
+  tagNameList = tagName.split("/") if isinstance(tagName, str) else tagName
+  for tag in tagNameList:
+    nodeList = node.getElementsByTagName(tag)
+    if len(nodeList) == 0:
+      raise RuntimeError("No child tag: " + tag)
+    node = nodeList[0]
+  return node
 
 
-def getFirstText(node: Node, tagName: str) -> str:
+def getFirstText(node: Node, tagName: str | list[str]) -> str:
   return getText(getFirst(node, tagName))
 
 
-def getFirstHtml(node: Node, tagName: str) -> str:
+def getFirstHtml(node: Node, tagName: str | list[str]) -> str:
   return simplifyHTML(getFirstText(node, tagName))
+
+
+def yesOrNo(cond: bool) -> str:
+  return "yes" if cond else "no"

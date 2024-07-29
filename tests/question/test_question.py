@@ -3,6 +3,7 @@ import unittest
 from xml.dom.minidom import parseString
 
 from moodle2pretext.question import *
+from moodle2pretext.question.multiplechoice import Choice
 
 
 def readfile(filepath):
@@ -67,9 +68,10 @@ class TestQuestionCreation(unittest.TestCase):
     question: MultipleChoiceQuestion = MultipleChoiceQuestion.fromEntry(node)
     self.assertEqual("digraph_shortest_path_mc", question.name)
     self.assertEqual(questionText, question.questionText)
+    self.assertEqual(True, question.allowsMultipleAnswers)
     self.assertEqual(10, len(question.choices))
-    self.assertEqual(("<p>1</p>", True), question.choices[0])
-    self.assertEqual(("<p>2</p>", False), question.choices[1])
+    self.assertEqual(Choice("<p>1</p>", "", True), question.choices[0])
+    self.assertEqual(Choice("<p>2</p>", "", False), question.choices[1])
 
   def test_shortanswer(self):
     with readfile("shortanswer_example.xml") as f:

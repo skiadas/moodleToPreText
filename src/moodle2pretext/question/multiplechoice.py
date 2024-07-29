@@ -1,30 +1,54 @@
+from dataclasses import dataclass
 from typing import Self
 from xml.dom import Node
 
 from moodle2pretext.question.question import Question
-from moodle2pretext.utils import getFirstText, getFirstHtml
+from moodle2pretext.utils import getFirst, getFirstText, getFirstHtml
+
+
+@dataclass
+class Choice:
+  statement: str
+  feedback: str
+  isCorrect: bool
 
 
 class MultipleChoiceQuestion(Question):
-  choices: list[tuple[str, bool]]
+  allowsMultipleAnswers: bool
+  choices: list[Choice]
 
   def __init__(
-      self, name: str, questionText: str, choices: list[tuple[str, bool]]):
+      self,
+      name: str,
+      questionText: str,
+      choices: list[Choice],
+      allowMultipleAnswers: bool):
     super().__init__(name, questionText)
     self.choices = choices
+    self.allowsMultipleAnswers = allowMultipleAnswers
 
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:
+    choices = [
+        makeChoice(node) for node in getFirst(
+            questionEntry, ["plugin_qtype_multichoice_question", "answers"]).
+        getElementsByTagName("answer")
+    ]
+    allowMultipleAnswers = int(
+        getFirstText(
+            questionEntry,
+            ["plugin_qtype_multichoice_question", "multichoice", "single"
+            ])) == 0
+
     return MultipleChoiceQuestion(
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
-        choices=[
-            makeChoice(node)
-            for node in questionEntry.getElementsByTagName("answer")
-        ])
+        choices=choices,
+        allowMultipleAnswers=allowMultipleAnswers)
 
 
 def makeChoice(node: Node) -> tuple[str, bool]:
-  return (
+  return Choice(
       getFirstHtml(node, "answertext"),
+      getFirstHtml(node, "feedback"),
       float(getFirstText(node, "fraction")) > 0)
