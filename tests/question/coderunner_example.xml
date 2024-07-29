@@ -2,7 +2,7 @@
 <question id="30557">
   <parent>0</parent>
   <name>sum_2d_array</name>
-  <questiontext>&lt;h4&gt;Sum Number Array&lt;/h4&gt;</questiontext>
+  <questiontext>&lt;h4&gt;Sum Number Array&lt;/h4&gt;&lt;p&gt;Stuff here&lt;/p&gt;</questiontext>
   <questiontextformat>1</questiontextformat>
   <generalfeedback></generalfeedback>
   <generalfeedbackformat>1</generalfeedbackformat>
