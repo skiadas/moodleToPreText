@@ -167,4 +167,3 @@ example.ptx
 sampleData/*
 .vscode/settings.json
 reports
-pdm.lock
