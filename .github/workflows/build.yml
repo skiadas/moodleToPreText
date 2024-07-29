@@ -32,4 +32,4 @@ jobs:
     - name: Run tests
       run: pdm run test
     - name: Build
-      run: pdm run build
+      run: pdm build
