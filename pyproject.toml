@@ -1,30 +1,51 @@
-[tool.poetry]
-name = "moodletopretext"
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+name = "moodle2pretext"
 version = "0.1.0"
 description = "Tool to convert Moodle course info (mostly quiz questions) to a pretext format"
-authors = ["Haris Skiadas <cskiadas@gmail.com>", "Barb Wahl <barb.wahl.1960@gmail.com>"]
+authors = [
+    {name = "Haris Skiadas", email = "cskiadas@gmail.com"},
+    {name = "Barb Wahl", email = "barb.wahl.1960@gmail.com"},
+]
+dependencies = [
+    "bs4<1.0.0,>=0.0.2",
+    "lxml<6.0.0,>=5.2.2",
+    "typer<1.0.0,>=0.12.3",
+    "ptx-formatter @ git+https://github.com/skiadas/ptx-formatter.git",
+    "pytest-html>=3.2.0",
+    "pdoc>=14.6.0",
+]
+requires-python = "<4.0,>=3.12"
 readme = "README.md"
+license = {text = "MIT"}
 
-packages = [{ include = "moodle2pretext", from = "src" }]
+[tool.pdm]
+distribution = true
 
-[tool.poetry.dependencies]
-python = "^3.12"
-bs4 = "^0.0.2"
-lxml = "^5.2.2"
-typer = "^0.12.3"
-ptx-formatter = {git = "https://github.com/skiadas/ptx-formatter.git"}
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest<7.0.0,>=6.0.0",
+    "pytest-clarity<2.0.0,>=1.0.1",
+    "pytest-mock",
+]
+dev = [
+    "yapf<1.0.0,>=0.40.2",
+]
 
-[tool.poetry.group.test.dependencies]
-pytest = "^6.0.0"
-pytest-clarity = "^1.0.1"
-pytest-mock = "*"
+[tool.pdm.build]
+includes = ["src/moodle2pretext"]
 
-[tool.poetry.group.dev.dependencies]
-yapf = "^0.40.2"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.pdm.scripts]
+test = "pytest"
+lint.cmd = "yapf -ri src tests"
+lint.help = "lint in-place"
+lint-diff.cmd = "yapf -rd src tests"
+lint-diff.help = "error if lint produces diffs"
+doc = "pdoc -n -d google -o docs --no-include-undocumented moodle2pretext"
+doc-serve = "pdoc -n -d google  --no-include-undocumented moodle2pretext"
 
 [tool.yapf]
 based_on_style = "google"
