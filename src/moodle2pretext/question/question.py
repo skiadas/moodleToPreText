@@ -34,5 +34,5 @@ def processQuestionText(text: str) -> tuple[str, str | None]:
   if (firstTag.name == "h3"):
     title = firstTag.get_text()
     firstTag.extract()
-    return str(soup), title
+    return str(soup).strip(), title
   return simplified, "((Placeholder title))"
