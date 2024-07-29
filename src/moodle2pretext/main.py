@@ -12,8 +12,12 @@ def main(zip_path: str, out_file: str):
     f.write(course.toPretext())
 
 
-if __name__ == "__main__":
+def run():
   typer.run(main)
+
+
+if __name__ == "__main__":
+  run()
 
 # main("sampleZip.zip", "example.ptx")
 
