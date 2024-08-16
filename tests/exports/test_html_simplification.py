@@ -1,6 +1,7 @@
 import unittest
 
 from moodle2pretext.utils.html import simplifyHTML
+from ptx_formatter import formatPretext
 
 exampleHTML = """<h3>Make List Items Uppercase 2</h3><p>Define the function <strong><span class="" style="font-family: &quot;Courier New&quot;, Courier, mono; color: rgb(0, 61, 245);">make_uppercase_2(mylist)</span></strong>, which takes a list parameter <strong><span class="" style="font-family: &quot;Courier New&quot;, Courier, mono; color: rgb(0, 61, 245);">mylist</span></strong> (a list of strings) and modifies its items to be all uppercase.&nbsp;</p><p>For example, if mylist is <span class="" style="font-family: &quot;Courier New&quot;, Courier, mono;"><strong>['cat', 'Dog', 'frOG']</strong></span>, then after calling <strong><span class="" style="font-family: &quot;Courier New&quot;, Courier, mono;">make_uppercase_2(mylist), mylist ==&nbsp; ['CAT', 'DOG', 'FROG'].&nbsp;</span></strong></p><p>The function prints nothing and returns nothing; it simply modifies the items in <span class="" style="font-family: &quot;Courier New&quot;, Courier, mono;"><strong>mylist</strong></span>.</p><p>Hints:</p><p><ul><li>To get the uppercased version of any string X,&nbsp; use the syntax:&nbsp; <strong><span class="" style="font-family: &quot;Courier New&quot;, Courier, mono;">X.upper()</span></strong></li><li>We don't need an accumulator here. Iterate k over the indices for mylist and, inside the loop, replace <span class="" style="font-family: &quot;Courier New&quot;, Courier, mono;"><strong>mylist[k]</strong></span> with its uppercased version.</li></ul></p>"""
 
@@ -36,8 +37,8 @@ class TestHtmlSimplification(unittest.TestCase):
 
   def test_i_and_u_become_em(self):
     self.assertInputProducesOutput(
-        '<p><u>here</u><i>there</i></p>',
-        "<p><em>here</em><em>there</em></p>",
+        '<p><u>here</u> and <i>there</i></p>',
+        "<p><em>here</em> and <em>there</em></p>",
     )
 
   def test_spans_with_mono_become_code(self):
@@ -69,12 +70,8 @@ class TestHtmlSimplification(unittest.TestCase):
   </ul>
 </ul>""",
         """<ul>
-  <li>
-    One
-  </li>
-  <li>
-    Two
-  </li>
+  <li>One</li>
+  <li>Two</li>
 </ul>""")
 
   def test_ensure_nested_list_is_in_p_in_item(self):
@@ -89,69 +86,55 @@ class TestHtmlSimplification(unittest.TestCase):
   <li>three</li>
 </ol>""",
         """<ol>
+  <li>one</li>
   <li>
-    one
-  </li>
-  <li>
-    <p>two
-    <ul>
-      <li>
-        two-a
-      </li>
-      <li>
-        two-b
-      </li>
-    </ul>
+    <p>
+      two
+      <ul>
+        <li>two-a</li>
+        <li>two-b</li>
+      </ul>
     </p>
   </li>
-  <li>
-    three
-  </li>
+  <li>three</li>
 </ol>""")
 
   def test_ensure_consecutive_nested_list_also_handled(self):
     self.assertInputProducesOutput(
         "<ol><li>one</li><li>two</li><ul><li>two-a</li></ul><ul><li>two-b</li></ul><li>three</li></ol>",
         """<ol>
+  <li>one</li>
   <li>
-    one
-  </li>
-  <li>
-    <p>two
-    <ul>
-      <li>
-        two-a
-      </li>
-    </ul>
+    <p>
+      two
+      <ul>
+        <li>two-a</li>
+      </ul>
     </p>
     <p>
-    <ul>
-      <li>
-        two-b
-      </li>
-    </ul>
+      <ul>
+        <li>two-b</li>
+      </ul>
     </p>
   </li>
-  <li>
-    three
-  </li>
+  <li>three</li>
 </ol>""")
 
   def test_remove_breaks_and_horizontal_rules(self):
     self.assertInputProducesOutput(
         '<p> stuff here <br /> more <hr /> stuff</p>',
-        '<p> stuff here  more  stuff</p>')
+        '<p>stuff here  more  stuff</p>')
 
   def test_divs_with_editor_indent_class_are_removed(self):
     self.assertInputProducesOutput(
-        '<div class="editor-indent">Stuff here <c>a</c></div>',
-        'Stuff here <c>a</c>')
+        '<p><div class="editor-indent">Stuff here <c>a</c></div></p>',
+        '<p>Stuff here <c>a</c></p>')
 
   def test_non_empty_divs_without_class_indent_become_paragraphs(self):
     self.assertInputProducesOutput('<div>Stuff here</div>', '<p>Stuff here</p>')
 
   def test_empty_divs_are_removed(self):
-    self.assertInputProducesOutput('<div><br/></div>', '')
+    self.assertInputProducesOutput('<p><div><br/></div></p>', '<p />')
 
   def test_h3_h4_get_simplified(self):
     self.assertInputProducesOutput(
@@ -182,7 +165,7 @@ class TestHtmlSimplification(unittest.TestCase):
         "<p>hi there<span style='mono'></span></p>", '<p>hi there</p>')
 
   def test_list_elements_with_no_content_are_removed(self):
-    self.assertInputProducesOutput("<ul>   </ul>", "")
+    self.assertInputProducesOutput("<p><ul>   </ul></p>", "<p />")
 
   def assertInputProducesOutput(self, input, output):
-    self.assertEqual(output, simplifyHTML(input))
+    self.assertEqual(output, formatPretext(simplifyHTML(input)))

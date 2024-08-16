@@ -2,7 +2,7 @@
 <question id="32303">
   <parent>0</parent>
   <name>pogil_1a_classname</name>
-  <questiontext>&lt;p&gt;What is the &lt;b&gt;name &lt;/b&gt;of the class&lt;/p&gt;</questiontext>
+  <questiontext>&lt;p&gt;What is the &lt;b&gt;name&lt;/b&gt; of the class&lt;/p&gt;</questiontext>
   <questiontextformat>1</questiontextformat>
   <generalfeedback></generalfeedback>
   <generalfeedbackformat>1</generalfeedbackformat>

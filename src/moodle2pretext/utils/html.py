@@ -25,7 +25,7 @@ class HtmlSimplifier:
     self.soup = BeautifulSoup(html, 'html.parser')
 
   def __str__(self) -> str:
-    return formatPretext(str(self.soup))
+    return str(self.soup)
 
   def printTopLevels(self) -> None:
     print([c.name if c.name is not None else "str" for c in self.soup.contents])

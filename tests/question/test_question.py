@@ -77,7 +77,7 @@ class TestQuestionCreation(unittest.TestCase):
     with readfile("shortanswer_example.xml") as f:
       exampleXML = f.read()
       node = parseString(exampleXML)
-    questionText = """<p>What is the <alert>name </alert>of the class</p>""".strip(
+    questionText = """<p>What is the <alert>name</alert> of the class</p>""".strip(
     )
     question: FillInQuestion = FillInQuestion.fromShortAnswerEntry(node)
     self.assertEqual("pogil_1a_classname", question.name)
