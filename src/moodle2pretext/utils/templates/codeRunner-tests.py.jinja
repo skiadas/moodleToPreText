@@ -1,0 +1,20 @@
+{% if testing %}
+from unittest import TestCase
+
+class myTests(TestCase):
+{% else %}
+from unittest.gui import TestCaseGui
+
+class myTests(TestCaseGui):
+{% endif %}
+
+{% for testcase in question.testCases %}
+  def test{{ loop.index }}(self):
+    resetMyStdOut()
+    setMyStdIn({{ testcase.stdInput.__repr__() }})
+    {{ testcase.testCode | indent }}
+    self.assertEqual({{ testcase.expected.__repr__() }}, getMyStdOut())
+
+{% endfor %}
+
+myTests().main()
