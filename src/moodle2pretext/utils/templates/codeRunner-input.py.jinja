@@ -32,6 +32,11 @@ def input(prompt=None):
   return _my_in.pop()
 
 {{ question.preamble }}
+{# This starts a """ string that holds the whole program code
+  if the student answer is meant to be a whole python program. #}
+{% if question is is_python_program %}
+_program = """
+{% endif %}
 {% if not testing %}
 ^^^^
 {{ question.preload }}

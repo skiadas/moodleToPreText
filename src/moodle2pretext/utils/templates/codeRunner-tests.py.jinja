@@ -1,3 +1,9 @@
+{# This closes the """ string that holds the whole program code
+  defined at the bottom of the input file. #}
+{% if question is is_python_program %}
+"""
+{% endif %}
+
 {% if testing %}
 from unittest import TestCase
 
@@ -12,7 +18,11 @@ class myTests(TestCaseGui):
   def test{{ loop.index }}(self):
     resetMyStdOut()
     setMyStdIn({{ testcase.stdInput.__repr__() }})
+    {% if question is is_python_program %}
+    exec(_program)
+    {% else %}
     {{ testcase.testCode | indent }}
+    {% endif %}
     self.assertEqual({{ testcase.expected.__repr__() }}, getMyStdOut())
 
 {% endfor %}
