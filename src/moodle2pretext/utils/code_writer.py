@@ -20,7 +20,8 @@ class CodeWriter():
   def getTests(self, question: CodeRunnerQuestion):
     return self.codeRunnerTests.render(question=question, testing=False)
 
-def indent(value, spaces: int|str = 4, includeFirstLine=False):
+
+def indent(value, spaces: int | str = 4, includeFirstLine=False):
   if isinstance(spaces, int):
     spaces = " " * spaces
   result = ("\n" + spaces).join(value.split("\n"))
@@ -28,8 +29,10 @@ def indent(value, spaces: int|str = 4, includeFirstLine=False):
     return spaces + result
   return result
 
+
 def is_python_program(value):
   if isinstance(value, CodeRunnerQuestion):
     return value.testCases[0].testCode.strip() == ""
   else:
-    raise RuntimeError("Can only use 'is_python_program' on coderunner questions.")
+    raise RuntimeError(
+        "Can only use 'is_python_program' on coderunner questions.")
