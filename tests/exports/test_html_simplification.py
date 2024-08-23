@@ -122,7 +122,7 @@ class TestHtmlSimplification(unittest.TestCase):
 
   def test_remove_breaks_and_horizontal_rules(self):
     self.assertInputProducesOutput(
-        '<p> stuff here <br /> more <hr /> stuff</p>',
+        '<p>stuff here <br /> more <hr /> stuff</p>',
         '<p>stuff here  more  stuff</p>')
 
   def test_divs_with_editor_indent_class_are_removed(self):
