@@ -4,11 +4,11 @@ from moodle2pretext.question.fillin import FillInQuestion
 from moodle2pretext.question.matching_question import MatchingQuestion
 from moodle2pretext.question.multiplechoice import MultipleChoiceQuestion
 from moodle2pretext.question.question import Question
-from moodle2pretext.utils import getFirst, getFirstText
+from moodle2pretext.utils import getLast, getFirstText
 
 
 def questionFromEntry(entry: Node) -> Question:
-  questionEntry = getFirst(entry, "question")
+  questionEntry = getLast(entry, "question")
   qType = getFirstText(questionEntry, "qtype")
   match qType:
     case "description":

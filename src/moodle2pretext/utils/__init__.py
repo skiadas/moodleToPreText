@@ -10,12 +10,20 @@ def getText(node: Node) -> str:
 
 
 def getFirst(node: Node, tagName: str | list[str]) -> Node:
+  return _getAtIndex(node, tagName, 0)
+
+
+def getLast(node: Node, tagName: str | list[str]) -> Node:
+  return _getAtIndex(node, tagName, -1)
+
+
+def _getAtIndex(node: Node, tagName: str | list[str], index: int) -> Node:
   tagNameList = tagName.split("/") if isinstance(tagName, str) else tagName
   for tag in tagNameList:
     nodeList = node.getElementsByTagName(tag)
     if len(nodeList) == 0:
       raise RuntimeError("No child tag: " + tag)
-    node = nodeList[0]
+    node = nodeList[index]
   return node
 
 
