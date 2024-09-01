@@ -15,8 +15,7 @@ dependencies = [
     "lxml<6.0.0,>=5.2.2",
     "typer<1.0.0,>=0.12.3",
     "ptx-formatter @ git+https://github.com/skiadas/ptx-formatter.git",
-    "pytest-html>=3.2.0",
-    "pdoc>=14.6.0",
+    "jinja2>=3.1.4",
 ]
 requires-python = "<4.0,>=3.12"
 readme = "README.md"
@@ -30,8 +29,10 @@ distribution = true
 
 [tool.pdm.dev-dependencies]
 test = [
-    "pytest<7.0.0,>=6.0.0",
+    "pytest<8.0.0,>=7.0.0",
     "pytest-clarity<2.0.0,>=1.0.1",
+    "pytest-html>=3.2.0",
+    "pdoc>=14.6.0",
     "pytest-mock",
 ]
 dev = [

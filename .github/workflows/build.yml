@@ -26,7 +26,7 @@ jobs:
         cache: true
       # You are now able to use PDM in your workflow
     - name: Install dependencies
-      run: pdm update
+      run: pdm install
     - name: Lint and error if needed
       run: pdm run lint-diff
     - name: Run tests
