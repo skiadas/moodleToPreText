@@ -9,7 +9,7 @@ def main(zip_path: str, out_file: str):
   """
   course = Course.fromZip(zip_path)
   with open(out_file, "w") as f:
-    f.write(course.toPretext())
+    f.write(course.ptxString)
 
 
 def run():

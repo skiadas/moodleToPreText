@@ -1,5 +1,7 @@
 from typing import Dict, Iterable, TextIO
+from urllib.parse import unquote, quote
 from bs4 import BeautifulSoup
+import bs4
 import re
 
 from ptx_formatter import formatPretext
@@ -9,20 +11,24 @@ from moodle2pretext.assignment import Assignment
 from moodle2pretext.question.multiplechoice import Choice
 from moodle2pretext.utils import yesOrNo
 from moodle2pretext.utils.code_writer import CodeWriter
+from moodle2pretext.assetManager import AssetManager
 
 # Pattern for which characters in a ID are to be
 # replaced by whitespace
 PATTERN = re.compile(r"[\s:]+")
+# Pattern to search for links to file assets
+FILE_MATCHER = re.compile(r"@@PLUGINFILE@@/([^?\n]*)")
 
 
 class PtxWriter:
 
-  def __init__(self):
+  def __init__(self, assetManager: AssetManager):
     self.soup = BeautifulSoup(features="xml")
     self.chapter = self.soup.new_tag("chapter")
     self.soup.append(self.chapter)
     self.seenIds = {}
     self.codeWriter = CodeWriter()
+    self.assetManager = assetManager
 
   def process(self, assignments: list[Assignment]):
     self.chapter.extend(map(self.makeAssignment, assignments))
@@ -54,14 +60,17 @@ class PtxWriter:
       tag.extend(content)
     return tag
 
-  def processQuestion(self, question: Question) -> Node:
+  def processQuestion(self, question: Question) -> bs4.element.Tag:
     exerciseTag = self.makeTag(
         "exercise",
         [
             self.makeTag("title", question.title),
             self.makeTag("statement", question.questionText)
         ],
-        attrs={"xml:id": self.makeUniqueId("exer", question.name)})
+        attrs={
+            "xml:id": self.makeUniqueId("exer", question.name),
+            "questionId": question.id
+        })
     if isinstance(question, MatchingQuestion):
       exerciseTag.append(self.getMatchingQuestionParts(question))
     elif isinstance(question, MultipleChoiceQuestion):
@@ -70,7 +79,19 @@ class PtxWriter:
       ...
     elif isinstance(question, CodeRunnerQuestion):
       exerciseTag.append(self.getCodeRunnerParts(question))
+    exerciseTag = self.fixAssetLinks(exerciseTag)
     return exerciseTag
+
+  def fixAssetLinks(self, node: bs4.element.Tag) -> bs4.element.Tag:
+    questionId = node.attrs["questionId"]
+    for el in node.find_all("img"):
+      srcLink = el.attrs["src"]
+      fileMatch = FILE_MATCHER.match(srcLink)
+      if fileMatch is not None:
+        filepath = unquote(fileMatch.group(1))
+        newFilePath = self.assetManager.locateResource(questionId, filepath)
+      el.attrs["src"] = quote(newFilePath)
+    return node
 
   def getMatchingQuestionParts(self, question: MatchingQuestion) -> Node:
     return self.makeTag("matches", map(self.makeMatch, question.matches))

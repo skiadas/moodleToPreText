@@ -31,6 +31,10 @@ def getFirstText(node: Node, tagName: str | list[str]) -> str:
   return getText(getFirst(node, tagName))
 
 
+def getFirstInt(node: Node, tagName: str | list[str]) -> str:
+  return int(getFirstText(node, tagName))
+
+
 def getFirstHtml(node: Node, tagName: str | list[str]) -> str:
   return simplifyHTML(getFirstText(node, tagName))
 
