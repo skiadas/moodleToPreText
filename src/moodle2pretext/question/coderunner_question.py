@@ -43,13 +43,14 @@ class CodeRunnerQuestion(Question):
 
   def __init__(
       self,
+      id: str,
       name: str,
       questionText: str,
       type: str,
       preload: str,
       answer: str,
       testCases: list[TestCase]):
-    super().__init__(name, questionText)
+    super().__init__(id, name, questionText)
     self.type = type
     self.preload = preload
     self.answer = answer
@@ -65,6 +66,7 @@ class CodeRunnerQuestion(Question):
   def fromEntry(questionEntry: Node) -> Self:
 
     return CodeRunnerQuestion(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
         type=getFirstText(questionEntry, "coderunnertype"),

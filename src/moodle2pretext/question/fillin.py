@@ -14,13 +14,18 @@ class FillInQuestion(Question):
   answers: tuple[conditionType, str]  # (condition, feedback)
 
   def __init__(
-      self, name: str, questionText: str, answers: tuple[conditionType, str]):
-    super().__init__(name, questionText)
+      self,
+      id: str,
+      name: str,
+      questionText: str,
+      answers: tuple[conditionType, str]):
+    super().__init__(id, name, questionText)
     self.answers = answers
 
   @staticmethod
   def fromShortAnswerEntry(questionEntry: Node) -> Self:
     return FillInQuestion(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
         answers=makeShortAnswers(questionEntry.getElementsByTagName("answer")))
@@ -28,6 +33,7 @@ class FillInQuestion(Question):
   @staticmethod
   def fromNumericalEntry(questionEntry: Node) -> Self:
     return FillInQuestion(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
         answers=makeNumericalAnswers(

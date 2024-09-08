@@ -19,11 +19,12 @@ class MultipleChoiceQuestion(Question):
 
   def __init__(
       self,
+      id: str,
       name: str,
       questionText: str,
       choices: list[Choice],
       allowMultipleAnswers: bool):
-    super().__init__(name, questionText)
+    super().__init__(id, name, questionText)
     self.choices = choices
     self.allowsMultipleAnswers = allowMultipleAnswers
 
@@ -41,6 +42,7 @@ class MultipleChoiceQuestion(Question):
             ])) == 0
 
     return MultipleChoiceQuestion(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
         choices=choices,

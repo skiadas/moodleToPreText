@@ -9,11 +9,13 @@ from moodle2pretext.utils.html import pretextify, simplifyHTML
 
 
 class Question:
+  id: str  # the question id in the Moodle file
   name: str  # internal name
   questionText: str  # HTML escaped
   title: Optional[str] = None
 
-  def __init__(self, name: str, questionText: str):
+  def __init__(self, id: str, name: str, questionText: str):
+    self.id = id
     self.name = name
     questionText, title = processQuestionText(questionText)
     self.questionText = questionText
@@ -22,6 +24,7 @@ class Question:
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:
     return Question(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"))
 

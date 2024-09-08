@@ -9,13 +9,18 @@ class MatchingQuestion(Question):
   matches: list[tuple[str, str]]
 
   def __init__(
-      self, name: str, questionText: str, matches: list[tuple[str, str]]):
-    super().__init__(name, questionText)
+      self,
+      id: str,
+      name: str,
+      questionText: str,
+      matches: list[tuple[str, str]]):
+    super().__init__(id, name, questionText)
     self.matches = matches
 
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:
     return MatchingQuestion(
+        id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
         questionText=getFirstText(questionEntry, "questiontext"),
         matches=createMatches(getFirst(questionEntry, "matches")))
