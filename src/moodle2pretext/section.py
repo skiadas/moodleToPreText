@@ -1,5 +1,5 @@
-from typing import IO, Self
-from xml.dom.minidom import parse
+from typing import Self
+from xml.dom import Node
 
 from moodle2pretext.utils import getFirstText
 
@@ -14,9 +14,7 @@ class Section:
     self.contents = contents
 
   @staticmethod
-  def fromFile(file: IO[bytes]) -> Self:
-    document = parse(file)
-
+  def fromFile(document: Node) -> Self:
     number = int(getFirstText(document, "number"))
     name = getFirstText(document, "name")
     summary = getFirstText(document, "summary")

@@ -1,7 +1,5 @@
-import re
 from tarfile import open, TarFile
 from typing import Self
-from xml.dom.minidom import parse
 from tempfile import TemporaryDirectory
 
 from moodle2pretext.assignment import Assignment
@@ -23,7 +21,7 @@ class Course:
     with open(zip_path, "r:gz") as tar:
       with TemporaryDirectory() as directory:
         course.prepareAssetManager(tar, directory)
-        course.processAllQuestions(tar)
+        course.processAllQuestions()
         course.processAllAssignments(tar)
         course.processSections(tar)
         course.sortAssignmentsBySection()
@@ -33,24 +31,23 @@ class Course:
   def prepareAssetManager(self, tar: TarFile, directory: str):
     self.assetManager = AssetManager(tar, directory)
 
-  def processAllQuestions(self, tar: TarFile):
-    f = tar.extractfile("questions.xml")
-    self.questions = parse(f).getElementsByTagName("question_bank_entry")
+  def processAllQuestions(self):
+    questionsDoc = self.assetManager.parseXML("questions.xml")
+    self.questions = questionsDoc.getElementsByTagName("question_bank_entry")
 
   def processAllAssignments(self: Self, tar: TarFile) -> None:
-    prog = re.compile(r"activities/quiz_[0-9]+/quiz\.xml")
+    regex = r"activities/quiz_[0-9]+/quiz\.xml"
+
     self.assignments = [
-        Assignment.fromFile(tar.extractfile(tarInfo), self.questions)
-        for tarInfo in tar.getmembers()
-        if prog.match(tarInfo.name)
+        Assignment.fromFile(doc, self.questions)
+        for doc in self.assetManager.parseList(regex)
     ]
 
   def processSections(self: Self, tar: TarFile) -> None:
-    prog = re.compile(r"sections/section_[0-9]+/section\.xml")
+    regex = r"sections/section_[0-9]+/section\.xml"
     self.sections = [
-        Section.fromFile(tar.extractfile(tarInfo))
-        for tarInfo in tar.getmembers()
-        if prog.match(tarInfo.name)
+        Section.fromFile(doc)
+        for doc in self.assetManager.parseList(regex)
     ]
     self.sections.sort(key=lambda s: s.number)
 

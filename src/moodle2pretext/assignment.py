@@ -1,6 +1,6 @@
 from typing import Self
 from xml.dom import Node
-from xml.dom.minidom import parse
+
 
 from moodle2pretext.question import Question, questionFromEntry
 from moodle2pretext.utils import getFirst, getFirstText, getText
@@ -16,9 +16,7 @@ class Assignment:
     self.questions = questions
 
   @staticmethod
-  def fromFile(filename, all_questions: list[Node]) -> Self:
-    document = parse(filename)
-
+  def fromFile(document: Node, all_questions: list[Node]) -> Self:
     id = getFirst(document, "activity").attributes["moduleid"].value
     quizEl = getFirst(document, "quiz")
     name = getFirstText(quizEl, "name")

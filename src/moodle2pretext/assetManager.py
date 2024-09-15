@@ -1,5 +1,6 @@
-from pathlib import Path
+from re import compile
 from typing import Self
+from collections.abc import Generator
 from tarfile import TarFile
 from xml.dom.minidom import parse
 from xml.dom import Node
@@ -16,8 +17,7 @@ class AssetManager:
     self.tar = tar
     self.imageDir = path.join(directory, "assets", "images")
     makedirs(self.imageDir)
-    f = tar.extractfile("files.xml")
-    entries = parse(f).getElementsByTagName("file")
+    entries = self.parseXML("files.xml").getElementsByTagName("file")
     self.assets: list[Asset] = [Asset.fromEntry(e) for e in entries]
     lst = sorted([f"{a.itemId}{a.fileName}" for a in self.assets])
     # s = set()
@@ -26,6 +26,15 @@ class AssetManager:
     #     print(l)
     #   s.add(l)
     # TODO
+
+  def parseXML(self: Self, filename: str) -> Node:
+    return parse(self.tar.extractfile(filename))
+
+  def parseList(self: Self, regex: str) -> Generator[Node, None, None]:
+    prog = compile(regex)
+    for tarInfo in self.tar.getmembers():
+      if prog.match(tarInfo.name):
+        yield parse(self.tar.extractfile(tarInfo))
 
   def locateResource(self, questionId: str, filepath: str) -> str:
     for asset in self.assets:
