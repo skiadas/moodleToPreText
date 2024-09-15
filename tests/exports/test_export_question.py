@@ -11,9 +11,10 @@ class TestExportQuestion(unittest.TestCase):
 
   def test_description(self):
     question = Question(
+        "questionId",
         "the-question-name",
         "<h3>The title here</h3><p>The Question Text Goes Here</p>")
-    node = PtxWriter().processQuestion(question)
+    node = PtxWriter(None).processQuestion(question)
     self.assertEqual("exercise", node.name)
     self.assertEqual("exer-the-question-name-1", node["xml:id"])
     self.assertEqual("The title here", node.title.get_text())
@@ -22,13 +23,14 @@ class TestExportQuestion(unittest.TestCase):
 
   def test_matching(self):
     question = MatchingQuestion(
+        "questionId",
         "name",
         "<p>text</p>",
         [
             ("premise1", "response1"), ("premise2", "response2"),
             ("premise3", "response3")
         ])
-    node = PtxWriter().processQuestion(question)
+    node = PtxWriter(None).processQuestion(question)
     self.assertIsNotNone(node.matches)
     self.assertEqual(3, len(node.matches.contents))
     firstMatch = node.matches.contents[0]
@@ -37,6 +39,7 @@ class TestExportQuestion(unittest.TestCase):
 
   def test_multiple_choice(self):
     question = MultipleChoiceQuestion(
+        "questionId",
         "name",
         "<p>text</p>",
         [
@@ -45,7 +48,7 @@ class TestExportQuestion(unittest.TestCase):
             Choice("choice3", "wrong!", False)
         ],
         allowMultipleAnswers=False)
-    node = PtxWriter().processQuestion(question)
+    node = PtxWriter(None).processQuestion(question)
     self.assertIsNotNone(node.choices)
     self.assertEqual(3, len(node.choices.contents))
     self.assertEqual("no", node.choices["multiple-correct"])
