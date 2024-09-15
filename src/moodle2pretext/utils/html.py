@@ -103,6 +103,16 @@ class HtmlSimplifier:
     for tag in self.soup.find_all("a"):
       newTag = self.putStringContentInNewTag(tag, "url")
       newTag.attrs["href"] = tag.attrs["href"]
+    for tag in self.soup.find_all("img"):
+      newTag = self.putStringContentInNewTag(tag, "image")
+      newTag.attrs["source"] = tag.attrs["src"]
+      newTag.attrs["width"] = "90%"
+      if tag.attrs["alt"] == "":
+        newTag.attrs["decorative"] = "yes"
+      else:
+        shortDescr = self.soup.new_tag("shortdescription")
+        shortDescr.contents = tag.attrs["alt"]
+        newTag.append(shortDescr)
     for tag in self.soup.find_all("tt"):
       self.putStringContentInNewTag(tag, "c")
     for tag in self.soup.find_all(["sup", "sub"]):

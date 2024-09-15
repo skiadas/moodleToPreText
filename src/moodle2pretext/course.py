@@ -1,6 +1,8 @@
-from tarfile import open, TarFile
+from tarfile import open as tarOpen, TarFile
 from typing import Self
 from tempfile import TemporaryDirectory
+import os
+import shutil
 
 from moodle2pretext.assignment import Assignment
 from moodle2pretext.section import Section
@@ -18,14 +20,16 @@ class Course:
   @staticmethod
   def fromZip(zip_path: str) -> Self:
     course = Course()
-    with open(zip_path, "r:gz") as tar:
+    with tarOpen(zip_path, "r:gz") as tar:
       with TemporaryDirectory() as directory:
         course.prepareAssetManager(tar, directory)
         course.processAllQuestions()
         course.processAllAssignments(tar)
         course.processSections(tar)
         course.sortAssignmentsBySection()
-        course.preparePtxResources()
+        course.preparePtxResources(directory)
+        outputDir = os.path.join(os.getcwd(), "outputs")
+        shutil.copytree(directory, outputDir)
     return course
 
   def prepareAssetManager(self, tar: TarFile, directory: str):
@@ -74,5 +78,9 @@ class Course:
     ptx_writer.process(self.assignments)
     return ptx_writer.toString()
 
-  def preparePtxResources(self: Self) -> None:
+  def preparePtxResources(self: Self, directory: str) -> None:
+    # TODO: Create different files and write them
     self.ptxString = self.toPretext()
+    filename = os.path.join(directory, "exercises.ptx")
+    with open(filename, "w") as f:
+      f.write(self.ptxString)
