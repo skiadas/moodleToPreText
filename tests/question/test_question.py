@@ -14,9 +14,7 @@ def readfile(filepath):
 class TestQuestionCreation(unittest.TestCase):
 
   def test_coderunner(self):
-    with readfile("coderunner_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("coderunner_example.xml")
     question: CodeRunnerQuestion = CodeRunnerQuestion.fromEntry(node)
     self.assertEqual("sum_2d_array", question.name)
     self.assertEqual("Sum Number Array", question.title)
@@ -33,9 +31,7 @@ class TestQuestionCreation(unittest.TestCase):
     self.assertEqual("", question.testCases[0].stdInput)
 
   def test_matching(self):
-    with readfile("matching_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("matching_example.xml")
     question: MatchingQuestion = MatchingQuestion.fromEntry(node)
     self.assertEqual("file_reading_match", question.name)
     self.assertEqual(
@@ -50,9 +46,7 @@ class TestQuestionCreation(unittest.TestCase):
         question.matches[0][1])
 
   def test_description(self):
-    with readfile("description_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("description_example.xml")
     questionText = """<p><h3>Other Priority Queue Implementations</h3></p>"""
     question: Question = Question.fromEntry(node)
     self.assertEqual(
@@ -60,9 +54,7 @@ class TestQuestionCreation(unittest.TestCase):
     self.assertEqual(questionText, question.questionText)
 
   def test_multichoice(self):
-    with readfile("multichoice_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("multichoice_example.xml")
     questionText = """
 <p><h3>Example: Directed Graph</h3></p>""".strip()
     question: MultipleChoiceQuestion = MultipleChoiceQuestion.fromEntry(node)
@@ -74,9 +66,7 @@ class TestQuestionCreation(unittest.TestCase):
     self.assertEqual(Choice("<p>2</p>", "", False), question.choices[1])
 
   def test_shortanswer(self):
-    with readfile("shortanswer_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("shortanswer_example.xml")
     questionText = """<p>What is the <alert>name</alert> of the class</p>""".strip(
     )
     question: FillInQuestion = FillInQuestion.fromShortAnswerEntry(node)
@@ -91,12 +81,16 @@ class TestQuestionCreation(unittest.TestCase):
         question.answers[1])
 
   def test_numerical(self):
-    with readfile("numerical_example.xml") as f:
-      exampleXML = f.read()
-      node = parseString(exampleXML)
+    node = parseFile("numerical_example.xml")
     question: FillInQuestion = FillInQuestion.fromNumericalEntry(node)
     self.assertEqual("pogil_2a_main_num_objects", question.name)
     self.assertEqual("<p>In the question here</p>", question.questionText)
     self.assertEqual(2, len(question.answers))
     self.assertEqual(((2.0, 0.5), "Correct!"), question.answers[0])
     self.assertEqual(((4.0, 0.3), "Almost!"), question.answers[1])
+
+def parseFile(filename: str) -> Node:
+  with readfile(filename) as f:
+    exampleXML = f.read()
+    return parseString(exampleXML).getElementsByTagName("question")[0]
+
