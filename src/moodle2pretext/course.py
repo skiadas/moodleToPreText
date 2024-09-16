@@ -50,8 +50,7 @@ class Course:
   def processSections(self: Self, tar: TarFile) -> None:
     regex = r"sections/section_[0-9]+/section\.xml"
     self.sections = [
-        Section.fromFile(doc)
-        for doc in self.assetManager.parseList(regex)
+        Section.fromFile(doc) for doc in self.assetManager.parseList(regex)
     ]
     self.sections.sort(key=lambda s: s.number)
 

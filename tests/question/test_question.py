@@ -89,8 +89,8 @@ class TestQuestionCreation(unittest.TestCase):
     self.assertEqual(((2.0, 0.5), "Correct!"), question.answers[0])
     self.assertEqual(((4.0, 0.3), "Almost!"), question.answers[1])
 
+
 def parseFile(filename: str) -> Node:
   with readfile(filename) as f:
     exampleXML = f.read()
     return parseString(exampleXML).getElementsByTagName("question")[0]
-

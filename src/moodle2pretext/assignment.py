@@ -1,7 +1,6 @@
 from typing import Self
 from xml.dom import Node
 
-
 from moodle2pretext.question import Question, questionFromEntry
 from moodle2pretext.utils import getFirst, getFirstText, getText
 from moodle2pretext.utils.html import simplifyHTML
