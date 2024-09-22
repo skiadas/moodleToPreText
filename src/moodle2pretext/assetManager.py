@@ -1,4 +1,5 @@
 from re import compile
+import shutil
 from typing import Self
 from collections.abc import Generator
 from tarfile import TarFile
@@ -16,16 +17,17 @@ class AssetManager:
   def __init__(self, tar: TarFile, directory: str):
     self.tar = tar
     self.imageDir = path.join(directory, "assets", "images")
+    self.sourceDir = path.join(directory, "source")
     makedirs(self.imageDir)
+    makedirs(self.sourceDir)
+    pathToHere = path.dirname(__file__)
+    shutil.copytree(
+        path.join(pathToHere, "utils", "ptxProjectFiles"),
+        directory,
+        dirs_exist_ok=True)
+
     entries = self.parseXML("files.xml").getElementsByTagName("file")
     self.assets: list[Asset] = [Asset.fromEntry(e) for e in entries]
-    lst = sorted([f"{a.itemId}{a.fileName}" for a in self.assets])
-    # s = set()
-    # for l in lst:
-    #   if l in s:
-    #     print(l)
-    #   s.add(l)
-    # TODO
 
   def parseXML(self: Self, filename: str) -> Node:
     return parse(self.tar.extractfile(filename))
@@ -45,6 +47,10 @@ class AssetManager:
           out.write(f.read())
         return path.join("images", baseFilename)
     raise Exception("Cannot find: " + questionId + " " + filepath)
+
+  def createSourceFile(self, filename, contents: str) -> None:
+    with open(path.join(self.sourceDir, filename), "w") as f:
+      f.write(contents)
 
 
 @dataclass

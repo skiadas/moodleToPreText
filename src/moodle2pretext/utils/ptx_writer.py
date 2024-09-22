@@ -24,14 +24,37 @@ class PtxWriter:
 
   def __init__(self, assetManager: AssetManager):
     self.soup = BeautifulSoup(features="xml")
-    self.chapter = self.soup.new_tag("chapter")
-    self.soup.append(self.chapter)
     self.seenIds = {}
     self.codeWriter = CodeWriter()
     self.assetManager = assetManager
 
+  def createAssignmentFile(self, assignment: Assignment, filename: str) -> None:
+    sectionTag = self.makeAssignment(assignment)
+    ptxContents = formatPretext(str(sectionTag))
+    self.assetManager.createSourceFile(filename, ptxContents)
+
+  def generateAssignmentFiles(self, assignments: list[Assignment]):
+    for idx, assignment in enumerate(assignments):
+      filename = f"sec-{idx}-{self.makeIdLike(assignment.name)}.ptx"
+      self.createAssignmentFile(assignment, filename)
+      yield filename
+
+  def generateChapter(self, assignments: list[Assignment]):
+    yield self.makeTag("title", "Chapter Title")
+    for filename in self.generateAssignmentFiles(assignments):
+      yield self.makeTag("xi:include", "", {"href": f"./{filename}"})
+
+  def createMainFile(self, chapter: Node) -> None:
+    ptxTag = self.makeTag(
+        "pretext",
+        [self.makeTag("book", [self.makeTag("title", "Exercises"), chapter])], {
+            "xml:lang": "en-US", "xmlns:xi": "http://www.w3.org/2001/XInclude"
+        })
+    self.assetManager.createSourceFile("main.ptx", formatPretext(str(ptxTag)))
+
   def process(self, assignments: list[Assignment]):
-    self.chapter.extend(map(self.makeAssignment, assignments))
+    chapter = self.makeTag("chapter", self.generateChapter(assignments))
+    self.createMainFile(chapter)
 
   def makeAssignment(self, assignment):
     exercisesTag = self.makeTag(

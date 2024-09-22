@@ -72,14 +72,5 @@ class Course:
         orderedAssignments.append(assignment)
     self.assignments = orderedAssignments
 
-  def toPretext(self: Self) -> str:
-    ptx_writer = PtxWriter(self.assetManager)
-    ptx_writer.process(self.assignments)
-    return ptx_writer.toString()
-
   def preparePtxResources(self: Self, directory: str) -> None:
-    # TODO: Create different files and write them
-    self.ptxString = self.toPretext()
-    filename = os.path.join(directory, "exercises.ptx")
-    with open(filename, "w") as f:
-      f.write(self.ptxString)
+    PtxWriter(self.assetManager).process(self.assignments)

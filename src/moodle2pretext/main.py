@@ -8,8 +8,6 @@ def main(zip_path: str, out_file: str):
   and produces a PreText output file with path out_file
   """
   course = Course.fromZip(zip_path)
-  with open(out_file, "w") as f:
-    f.write(course.ptxString)
 
 
 def run():
