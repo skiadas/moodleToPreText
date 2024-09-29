@@ -21,7 +21,13 @@ def main(
             dir_okay=True,
             writable=True,
             resolve_path=True,
-        )], overwrite: Annotated[bool, typer.Option(help="If set, files in the destination will be overwritten. Otherwise (default), an error is thrown.")] = False):
+        )],
+    overwrite: Annotated[
+        bool,
+        typer.Option(
+            help=
+            "If set, files in the destination will be overwritten. Otherwise (default), an error is thrown."
+        )] = False):
   """
   Reads a Moodle backup file with path moodle_backup
   and produces a PreText project at the provided output_location

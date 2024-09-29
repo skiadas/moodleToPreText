@@ -19,7 +19,10 @@ class Course:
     pass
 
   @staticmethod
-  def fromZip(moodle_backup: Path, output_location: Path, overwrite: bool = False) -> Self:
+  def fromZip(
+      moodle_backup: Path,
+      output_location: Path,
+      overwrite: bool = False) -> Self:
     course = Course()
     with tarOpen(moodle_backup, "r:gz") as tar:
       with TemporaryDirectory() as directory:
