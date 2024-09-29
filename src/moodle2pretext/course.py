@@ -1,3 +1,4 @@
+from pathlib import Path
 from tarfile import open as tarOpen, TarFile
 from typing import Self
 from tempfile import TemporaryDirectory
@@ -18,9 +19,9 @@ class Course:
     pass
 
   @staticmethod
-  def fromZip(zip_path: str) -> Self:
+  def fromZip(moodle_backup: Path, output_location: Path) -> Self:
     course = Course()
-    with tarOpen(zip_path, "r:gz") as tar:
+    with tarOpen(moodle_backup, "r:gz") as tar:
       with TemporaryDirectory() as directory:
         course.prepareAssetManager(tar, directory)
         course.processAllQuestions()
@@ -28,8 +29,7 @@ class Course:
         course.processSections(tar)
         course.sortAssignmentsBySection()
         course.preparePtxResources(directory)
-        outputDir = os.path.join(os.getcwd(), "outputs")
-        shutil.copytree(directory, outputDir)
+        shutil.copytree(directory, output_location)
     return course
 
   def prepareAssetManager(self, tar: TarFile, directory: str):

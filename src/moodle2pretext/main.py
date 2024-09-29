@@ -1,13 +1,32 @@
 import typer
+from pathlib import Path
+from typing import Annotated
 from moodle2pretext.course import Course
 
 
-def main(zip_path: str, out_file: str):
+def main(
+    moodle_backup: Annotated[Path,
+                             typer.Argument(
+                                 help="The backup file exported from Moodle.",
+                                 exists=True,
+                                 dir_okay=False,
+                                 readable=True,
+                                 resolve_path=True,
+                             )],
+    output_location: Annotated[
+        Path,
+        typer.Argument(
+            help="The location at which to create the PreText project",
+            file_okay=False,
+            dir_okay=True,
+            writable=True,
+            resolve_path=True,
+        )]):
   """
-  Reads a Moodle backup file with path zip_path
-  and produces a PreText output file with path out_file
+  Reads a Moodle backup file with path moodle_backup
+  and produces a PreText project at the provided output_location
   """
-  course = Course.fromZip(zip_path)
+  Course.fromZip(moodle_backup, output_location)
 
 
 def run():
