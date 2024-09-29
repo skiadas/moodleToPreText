@@ -19,7 +19,7 @@ class Course:
     pass
 
   @staticmethod
-  def fromZip(moodle_backup: Path, output_location: Path) -> Self:
+  def fromZip(moodle_backup: Path, output_location: Path, overwrite: bool = False) -> Self:
     course = Course()
     with tarOpen(moodle_backup, "r:gz") as tar:
       with TemporaryDirectory() as directory:
@@ -29,7 +29,7 @@ class Course:
         course.processSections(tar)
         course.sortAssignmentsBySection()
         course.preparePtxResources(directory)
-        shutil.copytree(directory, output_location)
+        shutil.copytree(directory, output_location, dirs_exist_ok=overwrite)
     return course
 
   def prepareAssetManager(self, tar: TarFile, directory: str):
