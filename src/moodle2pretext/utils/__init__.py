@@ -1,6 +1,6 @@
 from xml.dom import Node
 
-from moodle2pretext.utils.html import simplifyHTML
+from moodle2pretext.utils.html import pretextify
 
 
 def getText(node: Node) -> str:
@@ -36,7 +36,7 @@ def getFirstInt(node: Node, tagName: str | list[str]) -> str:
 
 
 def getFirstHtml(node: Node, tagName: str | list[str]) -> str:
-  return simplifyHTML(getFirstText(node, tagName))
+  return pretextify(getFirstText(node, tagName))
 
 
 def yesOrNo(cond: bool) -> str:
