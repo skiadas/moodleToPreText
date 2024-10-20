@@ -29,13 +29,17 @@ class Question:
         questionText=getFirstText(questionEntry, "questiontext"))
 
 
-# TODO
+
 def processQuestionText(text: str) -> tuple[str, str | None]:
+  """Processes a text and attempts to extract the first h3 tag as a title.
+
+  Returns a tuple of the content and the title.
+  """
   simplified = pretextify(text)
   soup = bs4.BeautifulSoup(simplified, "html.parser")
-  firstTag = soup.contents[0]
-  if (firstTag.name == "h3"):
-    title = firstTag.get_text()
-    firstTag.extract()
+  titleTag = soup.find("h3")
+  if (titleTag):
+    title = titleTag.get_text()
+    titleTag.extract()
     return str(soup).strip(), title
   return simplified, "((Placeholder title))"

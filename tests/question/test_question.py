@@ -51,15 +51,14 @@ class TestQuestionCreation(unittest.TestCase):
     question: Question = Question.fromEntry(node)
     self.assertEqual(
         "priority_queue_other_implementations_introduction", question.name)
-    self.assertEqual(questionText, question.questionText)
+    self.assertEqual("<p></p>", question.questionText)
 
   def test_multichoice(self):
     node = parseFile("multichoice_example.xml")
-    questionText = """
-<p><h3>Example: Directed Graph</h3></p>""".strip()
+    questionText = """<p><h3>Example: Directed Graph</h3></p>""".strip()
     question: MultipleChoiceQuestion = MultipleChoiceQuestion.fromEntry(node)
     self.assertEqual("digraph_shortest_path_mc", question.name)
-    self.assertEqual(questionText, question.questionText)
+    self.assertEqual("<p></p>", question.questionText)
     self.assertEqual(True, question.allowsMultipleAnswers)
     self.assertEqual(10, len(question.choices))
     self.assertEqual(Choice("<p>1</p>", "", True), question.choices[0])

@@ -97,7 +97,10 @@ class HtmlSimplifier:
       else:
         tag.name = "p"
     for tag in self.soup.find_all(["h3", "h4"]):
-      self.putStringContentInNewTag(tag, "h3")
+      if len(tag.contents) == 0:
+        tag.extract()
+      else:
+        self.putStringContentInNewTag(tag, "h3")
     for tag in self.soup.find_all("h5"):
       tag.name = "p"
     for tag in self.soup.find_all("a"):
