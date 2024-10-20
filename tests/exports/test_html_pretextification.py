@@ -67,7 +67,11 @@ Something
 
   def test_c_inside_pre_gets_unwrapped(self):
     self.assertInputProducesOutput(
-        "<pre><c>Something</c></pre>", "<pre>Something</pre>")
+        "<pre>   <c>Something # stuff\n</c>   </pre>",
+        "<pre>   Something # stuff\n</pre>")
+    self.assertInputProducesOutput(
+        "<premise><pre>   <c>Something # stuff\n</c>   </pre></premise>",
+        "<premise>\n  <pre>   Something # stuff\n  </pre>\n</premise>")
 
   def assertInputProducesOutput(
       self,
