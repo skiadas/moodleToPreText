@@ -12,6 +12,18 @@ class TestHtmlPretextification(unittest.TestCase):
         "<p>Something</p><p>More</p>",
         False)
 
+  def test_empty_paragraph_tags_are_removed(self):
+    self.assertInputProducesOutput(
+        "<p>Something</p><p></p><p /><p>More</p>",
+        "<p>Something</p><p>More</p>",
+        False)
+
+  def test_paragraph_tags_with_no_text_but_images_are_not_removed(self):
+    self.assertInputProducesOutput(
+        "<p>Something</p><p><image source=\"something.jpg\"/></p><p>More</p>",
+        "<p>Something</p><p><image source=\"something.jpg\"/></p><p>More</p>",
+        False)
+
   def test_top_level_nonwhitespace_strings_become_paragraphs(self):
     self.assertInputProducesOutput(
         "<p>Something</p>  stuff here   <p>More</p>",

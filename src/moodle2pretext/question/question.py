@@ -41,5 +41,7 @@ def processQuestionText(text: str) -> tuple[str, str | None]:
   if (titleTag):
     title = titleTag.get_text()
     titleTag.extract()
-    return str(soup).strip(), title
+    # Need to pretextify again to remove any empty p tags that just got
+    # created
+    return pretextify(str(soup).strip()), title
   return simplified, "((Placeholder title))"

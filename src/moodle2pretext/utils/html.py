@@ -61,6 +61,10 @@ class HtmlSimplifier:
     for preTag in self.soup.find_all("pre"):
       for cTag in preTag.find_all("c"):
         cTag.unwrap()
+    # Step 5: Remove empty paragraph tags
+    for pTag in self.soup.find_all("p"):
+      if not pTag.contents:
+        pTag.extract()
 
   def simplify(self) -> None:
     for tag in self.soup.find_all("code"):

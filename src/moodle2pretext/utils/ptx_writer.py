@@ -1,4 +1,4 @@
-from typing import Dict, Iterable, TextIO
+from typing import Dict, Iterable
 from urllib.parse import unquote, quote
 from bs4 import BeautifulSoup
 import bs4
@@ -57,8 +57,9 @@ class PtxWriter:
     self.createMainFile(chapter)
 
   def makeAssignment(self, assignment):
+    assignmentId = self.makeUniqueId("sec", assignment.name)
     exercisesTag = self.makeTag(
-        "exercises", map(self.processQuestion, assignment.questions))
+        "exercises", [self.processQuestion(q, assignmentId) for q in assignment.questions])
     return self.makeTag(
         "section",
         [
@@ -66,7 +67,7 @@ class PtxWriter:
             self.makeTag("introduction", assignment.intro),
             exercisesTag
         ],
-        attrs={"xml:id": self.makeUniqueId("sec", assignment.name)})
+        attrs={"xml:id": assignmentId})
 
   def toString(self) -> str:
     return formatPretext(str(self.soup))
@@ -83,7 +84,7 @@ class PtxWriter:
       tag.extend(content)
     return tag
 
-  def processQuestion(self, question: Question) -> bs4.element.Tag:
+  def processQuestion(self, question: Question, assignmentId: str) -> bs4.element.Tag:
     exerciseTag = self.makeTag(
         "exercise",
         [
@@ -92,7 +93,7 @@ class PtxWriter:
         ],
         attrs={
             "xml:id": self.makeUniqueId("exer", question.name),
-            "label": question.id
+            "label": f"exe-{assignmentId}-{question.id}"
         })
     if isinstance(question, MatchingQuestion):
       exerciseTag.append(self.getMatchingQuestionParts(question))
@@ -102,11 +103,10 @@ class PtxWriter:
       ...
     elif isinstance(question, CodeRunnerQuestion):
       exerciseTag.append(self.getCodeRunnerParts(question))
-    exerciseTag = self.fixAssetLinks(exerciseTag)
+    exerciseTag = self.fixAssetLinks(exerciseTag, question.id)
     return exerciseTag
 
-  def fixAssetLinks(self, node: bs4.element.Tag) -> bs4.element.Tag:
-    questionId = node.attrs["label"]
+  def fixAssetLinks(self, node: bs4.element.Tag, questionId: int) -> bs4.element.Tag:
     for el in node.find_all("image"):
       srcLink = el.attrs["source"]
       fileMatch = FILE_MATCHER.match(srcLink)

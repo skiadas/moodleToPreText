@@ -2,7 +2,7 @@
 <question id="32204">
   <parent>0</parent>
   <name>digraph_shortest_path_mc</name>
-  <questiontext>&lt;p&gt;&lt;span class="" style="font-size: x-large;"&gt;Example: Directed Graph&lt;/span&gt;&lt;/p&gt;</questiontext>
+  <questiontext>&lt;p&gt;&lt;span class="" style="font-size: x-large;"&gt;Example: Directed Graph&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Instructions here&lt;/p&gt;</questiontext>
   <questiontextformat>1</questiontextformat>
   <generalfeedback></generalfeedback>
   <generalfeedbackformat>1</generalfeedbackformat>

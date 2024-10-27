@@ -14,7 +14,7 @@ class TestExportQuestion(unittest.TestCase):
         "questionId",
         "the-question-name",
         "<h3>The title here</h3><p>The Question Text Goes Here</p>")
-    node = PtxWriter(None).processQuestion(question)
+    node = PtxWriter(None).processQuestion(question, "assignmentId")
     self.assertEqual("exercise", node.name)
     self.assertEqual("exer-the-question-name-1", node["xml:id"])
     self.assertEqual("The title here", node.title.get_text())
@@ -30,7 +30,7 @@ class TestExportQuestion(unittest.TestCase):
             ("premise1", "response1"), ("premise2", "response2"),
             ("premise3", "response3")
         ])
-    node = PtxWriter(None).processQuestion(question)
+    node = PtxWriter(None).processQuestion(question, "assignmentId")
     self.assertIsNotNone(node.matches)
     self.assertEqual(3, len(node.matches.contents))
     firstMatch = node.matches.contents[0]
@@ -48,7 +48,7 @@ class TestExportQuestion(unittest.TestCase):
             Choice("choice3", "wrong!", False)
         ],
         allowMultipleAnswers=False)
-    node = PtxWriter(None).processQuestion(question)
+    node = PtxWriter(None).processQuestion(question, "assignmentId")
     self.assertIsNotNone(node.choices)
     self.assertEqual(3, len(node.choices.contents))
     self.assertEqual("no", node.choices["multiple-correct"])
