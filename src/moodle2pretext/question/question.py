@@ -29,7 +29,6 @@ class Question:
         questionText=getFirstText(questionEntry, "questiontext"))
 
 
-
 def processQuestionText(text: str) -> tuple[str, str | None]:
   """Processes a text and attempts to extract the first h3 tag as a title.
 
