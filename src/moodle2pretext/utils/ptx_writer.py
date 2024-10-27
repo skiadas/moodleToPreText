@@ -92,7 +92,7 @@ class PtxWriter:
         ],
         attrs={
             "xml:id": self.makeUniqueId("exer", question.name),
-            "questionId": question.id
+            "label": question.id
         })
     if isinstance(question, MatchingQuestion):
       exerciseTag.append(self.getMatchingQuestionParts(question))
@@ -106,7 +106,7 @@ class PtxWriter:
     return exerciseTag
 
   def fixAssetLinks(self, node: bs4.element.Tag) -> bs4.element.Tag:
-    questionId = node.attrs["questionId"]
+    questionId = node.attrs["label"]
     for el in node.find_all("image"):
       srcLink = el.attrs["source"]
       fileMatch = FILE_MATCHER.match(srcLink)
