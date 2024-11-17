@@ -11,11 +11,12 @@ def simplifyHTML(html: str) -> str:
   return str(simplifier)
 
 
-def pretextify(html: str) -> str:
+def pretextify(html: str, contextId: int | None = None) -> str:
   simplifier = HtmlSimplifier(html)
   simplifier.simplify()
   simplifier.pretextify()
-  HtmlSimplifier(html)
+  if contextId is not None:
+    simplifier.addIdToImages(contextId)
   return str(simplifier)
 
 
@@ -173,6 +174,9 @@ class HtmlSimplifier:
             child.insert_before(prev_text)
           pr.insert_after("")
 
+  def addIdToImages(self, contextId: int):
+    for tag in self.soup.find_all("image"):
+      tag.attrs["itemid"] = contextId
 
 def stripBlanks(tag: Node):
   for idx in [0, -1]:

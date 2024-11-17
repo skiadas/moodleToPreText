@@ -35,8 +35,8 @@ def getFirstInt(node: Node, tagName: str | list[str]) -> str:
   return int(getFirstText(node, tagName))
 
 
-def getFirstHtml(node: Node, tagName: str | list[str]) -> str:
-  return pretextify(getFirstText(node, tagName))
+def getFirstHtml(node: Node, tagName: str | list[str], itemId: int | None = None) -> str:
+  return pretextify(getFirstText(node, tagName), itemId)
 
 
 def yesOrNo(cond: bool) -> str:

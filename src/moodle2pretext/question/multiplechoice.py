@@ -51,6 +51,6 @@ class MultipleChoiceQuestion(Question):
 
 def makeChoice(node: Node) -> tuple[str, bool]:
   return Choice(
-      getFirstHtml(node, "answertext"),
+      getFirstHtml(node, "answertext", int(node.getAttribute("id"))),
       getFirstHtml(node, "feedback"),
       float(getFirstText(node, "fraction")) > 0)

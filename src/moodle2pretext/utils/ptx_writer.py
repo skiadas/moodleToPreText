@@ -111,12 +111,14 @@ class PtxWriter:
   def fixAssetLinks(
       self, node: bs4.element.Tag, questionId: int) -> bs4.element.Tag:
     for el in node.find_all("image"):
+      itemId = int(el.attrs.get("itemid", questionId))
       srcLink = el.attrs["source"]
       fileMatch = FILE_MATCHER.match(srcLink)
       if fileMatch is not None:
         filepath = unquote(fileMatch.group(1))
-        newFilePath = self.assetManager.locateResource(questionId, filepath)
+        newFilePath = self.assetManager.locateResource(itemId, filepath)
         el.attrs["source"] = quote(newFilePath)
+        el.attrs.pop("itemid", None)
     return node
 
   def getMatchingQuestionParts(self, question: MatchingQuestion) -> Node:

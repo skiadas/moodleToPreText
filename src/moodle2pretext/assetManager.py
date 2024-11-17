@@ -38,15 +38,15 @@ class AssetManager:
       if prog.match(tarInfo.name):
         yield parse(self.tar.extractfile(tarInfo))
 
-  def locateResource(self, questionId: str, filepath: str) -> str:
+  def locateResource(self, itemId: int | str, filepath: str) -> str:
     for asset in self.assets:
-      if asset.itemId == int(questionId) and asset.fileName == filepath:
-        baseFilename = f"{questionId}-{filepath}"
+      if asset.itemId == int(itemId) and asset.fileName == filepath:
+        baseFilename = f"{itemId}-{filepath}"
         f = self.tar.extractfile(asset.getPathToResource())
         with open(path.join(self.imageDir, baseFilename), "wb") as out:
           out.write(f.read())
         return path.join("images", baseFilename)
-    raise Exception("Cannot find: " + questionId + " " + filepath)
+    raise Exception(f"Cannot find: {itemId} {filepath}")
 
   def createSourceFile(self, filename, contents: str) -> None:
     with open(path.join(self.sourceDir, filename), "w") as f:
