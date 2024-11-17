@@ -14,8 +14,8 @@ from moodle2pretext.utils.code_writer import CodeWriter
 from moodle2pretext.assetManager import AssetManager
 
 # Pattern for which characters in a ID are to be
-# replaced by whitespace
-PATTERN = re.compile(r"[\s:]+")
+# replaced by dash
+PATTERN = re.compile(r"[\W]+")
 # Pattern to search for links to file assets
 FILE_MATCHER = re.compile(r"@@PLUGINFILE@@/([^?\n]*)")
 
