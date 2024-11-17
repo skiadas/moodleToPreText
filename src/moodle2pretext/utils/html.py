@@ -178,6 +178,7 @@ class HtmlSimplifier:
     for tag in self.soup.find_all("image"):
       tag.attrs["itemid"] = contextId
 
+
 def stripBlanks(tag: Node):
   for idx in [0, -1]:
     # must account for case where this is a list containing at most empty
