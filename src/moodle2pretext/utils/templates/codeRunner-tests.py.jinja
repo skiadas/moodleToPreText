@@ -23,7 +23,7 @@ class myTests(TestCaseGui):
     {% else %}
     {{ testcase.testCode | indent }}
     {% endif %}
-    self.assertEqual({{ testcase.expected.__repr__() }}, getMyStdOut())
+    self.assertEqual(getMyStdOut().strip(), {{ testcase.expected.__repr__() }})
 
 {% endfor %}
 
