@@ -13,8 +13,16 @@ def getFirst(node: Node, tagName: str | list[str]) -> Node:
   return _getAtIndex(node, tagName, 0)
 
 
+def isEmpty(node: Node) -> bool:
+  return getText(node).strip() == ""
+
+
 def getLast(node: Node, tagName: str | list[str]) -> Node:
   return _getAtIndex(node, tagName, -1)
+
+
+def getAll(node: Node, tagName: str) -> list[Node]:
+  return node.getElementsByTagName(tagName)
 
 
 def _getAtIndex(node: Node, tagName: str | list[str], index: int) -> Node:

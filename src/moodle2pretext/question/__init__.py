@@ -3,6 +3,7 @@ from moodle2pretext.question.coderunner_question import CodeRunnerQuestion
 from moodle2pretext.question.fillin import FillInQuestion
 from moodle2pretext.question.matching_question import MatchingQuestion
 from moodle2pretext.question.multiplechoice import MultipleChoiceQuestion
+from moodle2pretext.question.exercisegroup_question import ExerciseGroupQuestion
 from moodle2pretext.question.question import Question
 from moodle2pretext.utils import getLast, getFirstText
 
@@ -15,8 +16,9 @@ def questionFromEntry(entry: Node) -> Question:
       return Question.fromEntry(questionEntry)
     case "coderunner":
       return CodeRunnerQuestion.fromEntry(questionEntry)
-    case "matchwiris":
-      return MatchingQuestion.fromEntry(questionEntry)
+    case "matchwiris" | "match":
+      # return MatchingQuestion.fromEntry(questionEntry)
+      return ExerciseGroupQuestion.fromMatchingCaseEntry(questionEntry)
     case "shortanswer":
       return FillInQuestion.fromShortAnswerEntry(questionEntry)
     case "numerical":

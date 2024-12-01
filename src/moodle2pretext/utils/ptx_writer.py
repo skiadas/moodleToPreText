@@ -87,24 +87,37 @@ class PtxWriter:
 
   def processQuestion(
       self, question: Question, assignmentId: str) -> bs4.element.Tag:
-    exerciseTag = self.makeTag(
-        "exercise",
-        [
-            self.makeTag("title", question.title),
-            self.makeTag("statement", question.questionText)
-        ],
-        attrs={
-            "xml:id": self.makeUniqueId("exer", question.name),
-            "label": f"exe-{assignmentId}-{question.id}"
-        })
-    if isinstance(question, MatchingQuestion):
-      exerciseTag.append(self.getMatchingQuestionParts(question))
-    elif isinstance(question, MultipleChoiceQuestion):
-      exerciseTag.append(self.getMCQuestionParts(question))
-    elif isinstance(question, FillInQuestion):
-      ...
-    elif isinstance(question, CodeRunnerQuestion):
-      exerciseTag.append(self.getCodeRunnerParts(question))
+    attrs = {
+        "xml:id": self.makeUniqueId("exer", question.name),
+        "label": f"exe-{assignmentId}-{question.id}"
+    }
+
+    if isinstance(question, ExerciseGroupQuestion):
+      exerciseTag = self.makeTag(
+          "exercisegroup",
+          [
+              self.makeTag("title", question.title),
+              self.makeTag("introduction", question.questionText)
+          ],
+          attrs=attrs)
+      for question in question.exercises:
+        exerciseTag.append(self.processQuestion(question, assignmentId))
+    else:
+      exerciseTag = self.makeTag(
+          "exercise",
+          [
+              self.makeTag("title", question.title),
+              self.makeTag("statement", question.questionText)
+          ],
+          attrs=attrs)
+      if isinstance(question, MatchingQuestion):
+        exerciseTag.append(self.getMatchingQuestionParts(question))
+      elif isinstance(question, MultipleChoiceQuestion):
+        exerciseTag.append(self.getMCQuestionParts(question))
+      elif isinstance(question, FillInQuestion):
+        ...
+      elif isinstance(question, CodeRunnerQuestion):
+        exerciseTag.append(self.getCodeRunnerParts(question))
     exerciseTag = self.fixAssetLinks(exerciseTag, question.id)
     return exerciseTag
 
@@ -134,7 +147,10 @@ class PtxWriter:
     return self.makeTag(
         "choices",
         map(self.makeChoice, question.choices),
-        {"multiple-correct": yesOrNo(question.allowsMultipleAnswers)})
+        {
+            "multiple-correct": yesOrNo(question.allowsMultipleAnswers),
+            "randomize": "yes"
+        })
 
 
 # TODO: Allow other languages?
