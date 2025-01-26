@@ -37,9 +37,3 @@ def input(prompt=None):
 {% if question is is_python_program %}
 _program = """
 {% endif %}
-{% if not testing %}
-^^^^
-{{ question.preload }}
-{% else %}
-{{ question.answer }}
-{% endif %}

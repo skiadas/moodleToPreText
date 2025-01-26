@@ -11,8 +11,18 @@ class CodeWriter():
     self.env = Environment(loader=PackageLoader("moodle2pretext.utils"))
     self.env.filters['indent'] = indent
     self.env.tests['is_python_program'] = is_python_program
-    self.codeRunnerInput = self.env.get_template("codeRunner-input.py.jinja")
+    self.codeRunnerPreamble = self.env.get_template(
+        "codeRunner-preamble.py.jinja")
+    self.codeRunnerInput = self.env.get_template("codeRunner-code.py.jinja")
+    self.codeRunnerPostamble = self.env.get_template(
+        "codeRunner-postamble.py.jinja")
     self.codeRunnerTests = self.env.get_template("codeRunner-tests.py.jinja")
+
+  def getPreamble(self, question: CodeRunnerQuestion):
+    return self.codeRunnerPreamble.render(question=question, testing=False)
+
+  def getPostamble(self, question: CodeRunnerQuestion):
+    return self.codeRunnerPostamble.render(question=question, testing=False)
 
   def getInput(self, question: CodeRunnerQuestion):
     return self.codeRunnerInput.render(question=question, testing=False)

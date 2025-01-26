@@ -159,7 +159,13 @@ class PtxWriter:
     return self.makeTag(
         "program",
         [
-            self.makeTag("input", [self.codeWriter.getInput(question)]),
+            self.makeTag(
+                "preamble", [self.codeWriter.getPreamble(question)],
+                {"visible": "no"}),
+            self.makeTag("code", [self.codeWriter.getInput(question)]),
+            self.makeTag(
+                "postamble", [self.codeWriter.getPostamble(question)],
+                {"visible": "no"}),
             self.makeTag("tests", [self.codeWriter.getTests(question)])
         ], {
             "language": "python", "interactive": "activecode"
