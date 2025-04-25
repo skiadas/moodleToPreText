@@ -1,3 +1,7 @@
+import re
+
+RIGHT_WHITESPACE_TRIMMER = re.compile("\\s+(?=\\n|$)")
+
 {% if testing %}
 from unittest import TestCase
 
@@ -17,7 +21,7 @@ class myTests(TestCaseGui):
     {% else %}
     {{ testcase.testCode | indent }}
     {% endif %}
-    self.assertEqual(getMyStdOut().strip(), {{ testcase.expected.__repr__() }}.strip(), {% if testcase.stdInput %}"Input: " + {{ testcase.stdInput.__repr__() }}{% else %}"Test: " + {{ testcase.testCode.__repr__()}}{%endif%})
+    self.assertEqual(RIGHT_WHITESPACE_TRIMMER.sub("", getMyStdOut().strip()), {{ testcase.expected.__repr__() }}.strip(), {% if testcase.stdInput %}"Input: " + {{ testcase.stdInput.__repr__() }}{% else %}"Test: " + {{ testcase.testCode.__repr__()}}{%endif%})
 
 {% endfor %}
 
