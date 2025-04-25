@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Self
+from typing import Self, Optional
 from xml.dom import Node
 from moodle2pretext.question.question import Question
 from moodle2pretext.utils import getFirst, getFirstText
@@ -39,6 +39,7 @@ class CodeRunnerQuestion(Question):
   type: str  # python3 or ...
   preload: str
   answer: str  # the correct answer
+  preamble: Optional[str]
   testCases: list[TestCase]  # Array of test cases
 
   def __init__(
@@ -49,11 +50,13 @@ class CodeRunnerQuestion(Question):
       type: str,
       preload: str,
       answer: str,
+      preamble: Optional[str],
       testCases: list[TestCase]):
     super().__init__(id, name, questionText)
     self.type = type
     self.preload = preload
     self.answer = answer
+    self.preamble = preamble
     self.testCases = testCases
 
   def __str__(self):
@@ -64,7 +67,12 @@ class CodeRunnerQuestion(Question):
 
   @staticmethod
   def fromEntry(questionEntry: Node) -> Self:
-
+    template = getFirstText(questionEntry, ["coderunner_option", "template"])
+    preamble = None
+    if template != "$@NULL@$":
+      index = template.find("{{ STUDENT_ANSWER }}")
+      if (index != -1):
+        preamble = template[0:index]
     return CodeRunnerQuestion(
         id=questionEntry.getAttribute("id"),
         name=getFirstText(questionEntry, "name"),
@@ -72,6 +80,7 @@ class CodeRunnerQuestion(Question):
         type=getFirstText(questionEntry, "coderunnertype"),
         preload=getFirstText(questionEntry, "answerpreload"),
         answer=getFirstText(questionEntry, "answer"),
+        preamble=preamble,
         testCases=[
             TestCase.fromNode(tc)
             for tc in questionEntry.getElementsByTagName("coderunner_testcase")
