@@ -1,6 +1,6 @@
 from typing import Dict, Iterable
 from urllib.parse import unquote, quote
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import bs4
 import re
 
@@ -11,6 +11,7 @@ from moodle2pretext.assignment import Assignment
 from moodle2pretext.question.multiplechoice import Choice
 from moodle2pretext.utils import yesOrNo
 from moodle2pretext.utils.code_writer import CodeWriter
+from moodle2pretext.utils.python_code_runner import PythonCodeRunner
 from moodle2pretext.assetManager import AssetManager
 
 # Pattern for which characters in a ID are to be
@@ -117,6 +118,9 @@ class PtxWriter:
       elif isinstance(question, FillInQuestion):
         ...
       elif isinstance(question, CodeRunnerQuestion):
+        # Must extend the statement
+        list(exerciseTag.children)[-1].extend(
+            self.getCodeRunnerExamples(question))
         exerciseTag.append(self.getCodeRunnerParts(question))
     exerciseTag = self.fixAssetLinks(exerciseTag, question.id)
     return exerciseTag
@@ -154,6 +158,55 @@ class PtxWriter:
 
 
 # TODO: Allow other languages?
+
+  def getCodeRunnerExamples(self, question: CodeRunnerQuestion) -> list[Node]:
+    results = PythonCodeRunner().runExampleCases(question)
+
+    if len(results) == 0:
+      return [self.makeTag("p", "For example:")]
+
+    includeTestCode = results[0][0] != ""
+    includeInput = results[0][1] != ""
+    mask = [includeTestCode, includeInput, True]
+
+    def choose(lst):
+      return [a for a, include in zip(lst, mask) if include]
+
+    def precodify(s):
+      return self.makeTag("p", [self.makeTag("cd", [NavigableString(s)])])
+
+    if not includeTestCode:
+      columnWidths = [0, 30, 70]
+    elif not includeInput:
+      columnWidths = [40, 0, 60]
+    else:
+      columnWidths = [40, 20, 40]
+
+    def cell(s):
+      return self.makeTag("cell", s, {"bottom": "minor", "right": "minor"})
+
+    def codeCell(s):
+      attrs = {"bottom": "minor", "right": "minor"}
+      return self.makeTag("cell", [precodify(s)], attrs)
+
+    def col(w):
+      return self.makeTag("col", [], {"width": f"{w}%", "top": "minor"})
+
+    def row(lst, header=False):
+      attrs = {"left": "minor", "header": "yes" if header else "no"}
+      return self.makeTag("row", choose(lst), attrs)
+
+    cols = choose([col(width) for width in columnWidths])
+    header = row([cell("Test"), cell("Input"), cell("Result")], True)
+    rows = [
+        row([codeCell(testCode), codeCell(stdinput), codeCell(result)])
+        for (testCode, stdinput, result) in results
+    ]
+
+    return [
+        self.makeTag("p", "For example:"),
+        self.makeTag("tabular", [*cols, header, *rows])
+    ]
 
   def getCodeRunnerParts(self, question: CodeRunnerQuestion) -> Node:
     return self.makeTag(
