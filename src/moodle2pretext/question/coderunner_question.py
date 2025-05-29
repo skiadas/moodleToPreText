@@ -25,6 +25,14 @@ class TestCase:
     self.useAsExample = useAsExample
     self.show = show
 
+  def __repr__(self) -> str:
+    return f"""TestCase(
+    code='{self.testCode}',
+    stdin='{self.stdInput}',
+    expected='{self.expected}',
+    example={self.useAsExample},
+    display={self.show})"""
+
   @staticmethod
   def fromNode(tc: Node) -> Self:
     return TestCase(
