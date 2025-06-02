@@ -66,6 +66,7 @@ class CodeRunnerQuestion(Question):
     self.answer = answer
     self.preamble = preamble
     self.testCases = testCases
+    self.datafiles = {}
 
   def __str__(self):
     return (

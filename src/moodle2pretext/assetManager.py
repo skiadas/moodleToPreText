@@ -8,8 +8,41 @@ from xml.dom import Node
 from dataclasses import dataclass
 from os import makedirs
 from os import path
+from io import BytesIO
 
 from moodle2pretext.utils import getFirstInt, getFirstText
+
+
+@dataclass
+class Asset:
+  assetId: int
+  itemId: int
+  contentHash: str
+  filePath: str
+  fileName: str
+  fileArea: str
+  fileSize: int
+  mimeType: str
+  timeCreated: int
+  timeModified: int
+
+  @staticmethod
+  def fromEntry(e: Node) -> Self:
+    asset = Asset(
+        int(e.attributes["id"].value),
+        getFirstInt(e, "itemid"),
+        getFirstText(e, "contenthash"),
+        getFirstText(e, "filepath"),
+        getFirstText(e, "filename"),
+        getFirstText(e, "filearea"),
+        getFirstText(e, "filesize"),
+        getFirstText(e, "mimetype"),
+        getFirstInt(e, "timecreated"),
+        getFirstInt(e, "timemodified"))
+    return asset
+
+  def getPathToResource(self: Self) -> str:
+    return path.join("files", self.contentHash[:2], self.contentHash)
 
 
 class AssetManager:
@@ -38,11 +71,18 @@ class AssetManager:
       if prog.match(tarInfo.name):
         yield parse(self.tar.extractfile(tarInfo))
 
+  def getAssetAsFileHandler(self, asset: Asset):
+    return self.tar.extractfile(asset.getPathToResource())
+
+  def getAssetAsString(self, asset: Asset) -> str:
+    with self.getAssetAsFileHandler(asset) as f:
+      return f.read().decode("utf-8")
+
   def locateResource(self, itemId: int | str, filepath: str) -> str:
     for asset in self.assets:
       if asset.itemId == int(itemId) and asset.fileName == filepath:
         baseFilename = f"{itemId}-{filepath}"
-        f = self.tar.extractfile(asset.getPathToResource())
+        f = self.getAssetAsFileHandler(asset)
         with open(path.join(self.imageDir, baseFilename), "wb") as out:
           out.write(f.read())
         return path.join("images", baseFilename)
@@ -52,32 +92,11 @@ class AssetManager:
     with open(path.join(self.sourceDir, filename), "w") as f:
       f.write(contents)
 
-
-@dataclass
-class Asset:
-  assetId: int
-  itemId: int
-  contentHash: str
-  filePath: str
-  fileName: str
-  fileSize: int
-  mimeType: str
-  timeCreated: int
-  timeModified: int
-
-  @staticmethod
-  def fromEntry(e: Node) -> Self:
-    asset = Asset(
-        int(e.attributes["id"].value),
-        getFirstInt(e, "itemid"),
-        getFirstText(e, "contenthash"),
-        getFirstText(e, "filepath"),
-        getFirstText(e, "filename"),
-        getFirstText(e, "filesize"),
-        getFirstText(e, "mimetype"),
-        getFirstInt(e, "timecreated"),
-        getFirstInt(e, "timemodified"))
-    return asset
-
-  def getPathToResource(self: Self) -> str:
-    return path.join("files", self.contentHash[:2], self.contentHash)
+  def locateDatafiles(self, itemId: int | str) -> dict[str, str]:
+    """For now, return list of the datafiles linked to a specific item id."""
+    return {
+        asset.fileName: self.getAssetAsString(asset)
+        for asset in self.assets
+        if asset.itemId == int(itemId) and asset.fileArea == "datafile" and
+        asset.fileName != "."
+    }

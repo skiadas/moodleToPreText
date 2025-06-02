@@ -118,6 +118,7 @@ class PtxWriter:
       elif isinstance(question, FillInQuestion):
         ...
       elif isinstance(question, CodeRunnerQuestion):
+        question.datafiles = self.assetManager.locateDatafiles(question.id)
         # Must extend the statement
         list(exerciseTag.children)[-1].extend(
             self.getCodeRunnerExamples(question))
