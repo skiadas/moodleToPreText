@@ -4,6 +4,7 @@ from xml.dom import Node
 
 from moodle2pretext.question.question import Question
 from moodle2pretext.utils import getFirst, getFirstText
+from moodle2pretext.utils.html import pretextify
 
 # either a string RegEx or (number, tolerance)
 conditionType: TypeAlias = str | tuple[float, float]
@@ -11,16 +12,24 @@ conditionType: TypeAlias = str | tuple[float, float]
 
 class FillInQuestion(Question):
   # Implicitly first answer is the "correct" one
-  answers: tuple[conditionType, str]  # (condition, feedback)
+  answers: list[tuple[conditionType, str]]  # (condition, feedback)
 
   def __init__(
       self,
       id: str,
       name: str,
       questionText: str,
-      answers: tuple[conditionType, str]):
+      answers: list[tuple[conditionType, str]]):
     super().__init__(id, name, questionText)
     self.answers = answers
+
+  def getCorrectAnswer(self):
+    (cond, _) = self.answers[0]
+    if isinstance(cond, str):
+      return cond
+    else:
+      (value, _) = cond
+      return value
 
   @staticmethod
   def fromShortAnswerEntry(questionEntry: Node) -> Self:
@@ -46,7 +55,7 @@ def makeShortAnswers(answerNodes: list[Node]) -> list[tuple[str, str]]:
       (
           getFirstText(node, "answertext"),
           float(getFirstText(node, "fraction")),
-          getFirstText(node, "feedback")) for node in answerNodes
+          pretextify(getFirstText(node, "feedback"))) for node in answerNodes
   ]
   triples.sort(key=lambda tr: tr[1], reverse=True)
   return [(text, feedback) for (text, _, feedback) in triples]
@@ -60,7 +69,7 @@ def makeNumericalAnswers(
           node.attributes["id"].value,
           float(getFirstText(node, "answertext")),
           float(getFirstText(node, "fraction")),
-          getFirstText(node, "feedback"))
+          pretextify(getFirstText(node, "feedback")))
       for node in answersNode.getElementsByTagName("answer")
   ]
   answers.sort(key=lambda tr: tr[2], reverse=True)

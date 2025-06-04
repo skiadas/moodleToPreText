@@ -116,7 +116,17 @@ class PtxWriter:
       elif isinstance(question, MultipleChoiceQuestion):
         exerciseTag.append(self.getMCQuestionParts(question))
       elif isinstance(question, FillInQuestion):
-        ...
+        list(exerciseTag.children)[-1].extend(
+            self.makeTag(
+                "p",
+                [
+                    self.makeTag(
+                        "fillin",
+                        "", {
+                            "answer": question.getCorrectAnswer(), "width": "16"
+                        })
+                ]))
+        exerciseTag.append(self.getFillinParts(question))
       elif isinstance(question, CodeRunnerQuestion):
         question.datafiles = self.assetManager.locateDatafiles(question.id)
         # Must extend the statement
@@ -147,6 +157,28 @@ class PtxWriter:
     return self.makeTag(
         "match",
         [self.makeTag("premise", premise), self.makeTag("response", response)])
+
+  def getFillinParts(self, question: FillInQuestion) -> Node:
+    answers = [
+        self.makeFillinAnswer(answer, i == 0)
+        for (i, answer) in enumerate(question.answers)
+    ]
+    return self.makeTag("evaluation", [self.makeTag("evaluate", answers)])
+
+  def makeFillinAnswer(self, answer, isCorrect):
+    (cond, feedback) = answer
+    feedbackTag = self.makeTag("feedback", feedback)
+    if isinstance(cond, tuple):  # numerical answer
+      (value, tolerance) = cond
+      comparison = self.makeTag(
+          "numcmp", "", {
+              "value": value, "tolerance": tolerance
+          })
+    else:
+      comparison = self.makeTag("strcmp", cond)
+    return self.makeTag(
+        "test", [comparison, feedbackTag],
+        {"correct": "yes"} if isCorrect else {})
 
   def getMCQuestionParts(self, question: MultipleChoiceQuestion) -> Node:
     return self.makeTag(
@@ -229,7 +261,7 @@ class PtxWriter:
     return self.makeTag(
         "choice",
         [
-            self.makeTag("statement", choice.statement),
+            self.makeTag("statement", [self.makeTag('p', choice.statement)]),
             self.makeTag("feedback", choice.feedback)
         ],
         attrs={"correct": yesOrNo(choice.isCorrect)})
