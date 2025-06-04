@@ -94,23 +94,17 @@ class PtxWriter:
     }
 
     if isinstance(question, ExerciseGroupQuestion):
-      exerciseTag = self.makeTag(
-          "exercisegroup",
-          [
-              self.makeTag("title", question.title),
-              self.makeTag("introduction", question.questionText)
-          ],
-          attrs=attrs)
+      exerciseTag = self.makeTag("exercisegroup", [], attrs=attrs)
+      if question.title is not None:
+        exerciseTag.append(self.makeTag("title", question.title))
+      exerciseTag.append(self.makeTag("introduction", question.questionText))
       for question in question.exercises:
         exerciseTag.append(self.processQuestion(question, assignmentId))
     else:
-      exerciseTag = self.makeTag(
-          "exercise",
-          [
-              self.makeTag("title", question.title),
-              self.makeTag("statement", question.questionText)
-          ],
-          attrs=attrs)
+      exerciseTag = self.makeTag("exercise", [], attrs=attrs)
+      if question.title is not None:
+        exerciseTag.append(self.makeTag("title", question.title))
+      exerciseTag.append(self.makeTag("statement", question.questionText))
       if isinstance(question, MatchingQuestion):
         exerciseTag.append(self.getMatchingQuestionParts(question))
       elif isinstance(question, MultipleChoiceQuestion):
@@ -123,7 +117,8 @@ class PtxWriter:
                     self.makeTag(
                         "fillin",
                         "", {
-                            "answer": question.getCorrectAnswer(), "width": "16"
+                            "answer": question.getCorrectAnswer(),
+                            "width": "16"
                         })
                 ]))
         exerciseTag.append(self.getFillinParts(question))
